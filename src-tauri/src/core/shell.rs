@@ -145,3 +145,79 @@ fn windows_extensions() -> Vec<String> {
         })
         .unwrap_or_else(|_| vec![".exe".into(), ".cmd".into(), ".bat".into()])
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn home_dir_returns_home_env() {
+        // HOME is typically set in test environments
+        let result = home_dir();
+        assert!(result.is_some(), "HOME or USERPROFILE should be set in test env");
+    }
+
+    #[test]
+    fn candidate_paths_non_windows_returns_single_path() {
+        let dir = PathBuf::from("/usr/bin");
+        let paths = candidate_paths(&dir, "ls", &[]);
+        assert_eq!(paths.len(), 1);
+        assert_eq!(paths[0], PathBuf::from("/usr/bin/ls"));
+    }
+
+    #[test]
+    fn path_exists_for_existing_path() {
+        assert!(path_exists(Path::new("/")));
+    }
+
+    #[test]
+    fn path_exists_for_nonexistent_path() {
+        assert!(!path_exists(Path::new("/nonexistent/path/that/does/not/exist")));
+    }
+
+    #[test]
+    fn command_result_construction() {
+        let result = CommandResult {
+            stdout: "hello".to_string(),
+            stderr: "world".to_string(),
+        };
+        assert_eq!(result.stdout, "hello");
+        assert_eq!(result.stderr, "world");
+    }
+
+    #[test]
+    fn run_capture_echo() {
+        let result = run_capture("echo", &["hello world"]);
+        assert_eq!(result.as_deref(), Some("hello world"));
+    }
+
+    #[test]
+    fn run_capture_nonexistent_command() {
+        let result = run_capture("nonexistent_command_12345", &[]);
+        assert!(result.is_none());
+    }
+
+    #[test]
+    fn run_checked_echo() {
+        let result = run_checked("echo", &["test"]);
+        assert!(result.is_ok());
+        let cmd = result.unwrap();
+        assert_eq!(cmd.stdout, "test");
+    }
+
+    #[test]
+    fn run_checked_false_returns_err() {
+        let result = run_checked("false", &[]);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn command_exists_ls() {
+        assert!(command_exists("ls"));
+    }
+
+    #[test]
+    fn command_exists_nonexistent() {
+        assert!(!command_exists("nonexistent_command_12345"));
+    }
+}

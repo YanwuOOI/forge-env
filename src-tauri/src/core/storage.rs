@@ -200,3 +200,163 @@ fn ensure_job_column(connection: &Connection, name: &str, declaration: &str) -> 
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn temp_storage() -> Storage {
+        let dir = std::env::temp_dir().join(format!("forge-env-test-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let db_path = dir.join(format!("test-{}.db", std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        let storage = Storage { db_path };
+        storage.initialize().unwrap();
+        storage
+    }
+
+    #[test]
+    fn persisteda_state_snapshot_default() {
+        let snapshot = PersistedStateSnapshot::default();
+        assert!(snapshot.jobs.is_empty());
+        assert!(snapshot.applied_mirror_preset.is_none());
+        assert!(snapshot.selected_host_id.is_none());
+        assert!(snapshot.last_env_target_profile.is_none());
+    }
+
+    #[test]
+    fn schema_creates_tables() {
+        let storage = temp_storage();
+        let conn = storage.connection().unwrap();
+
+        // Check settings table exists
+        let count: i32 = conn
+            .query_row(
+                "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='settings'",
+                [],
+                |row| row.get(0),
+            )
+            .unwrap();
+        assert_eq!(count, 1);
+
+        // Check jobs table exists
+        let count: i32 = conn
+            .query_row(
+                "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='jobs'",
+                [],
+                |row| row.get(0),
+            )
+            .unwrap();
+        assert_eq!(count, 1);
+    }
+
+    #[test]
+    fn save_and_load_job_round_trip() {
+        let storage = temp_storage();
+        let job = JobRecord {
+            id: "test-1".to_string(),
+            label: "Install Python".to_string(),
+            status: "completed".to_string(),
+            family: Some("Python".to_string()),
+            version: Some("3.12".to_string()),
+            category: Some("runtime".to_string()),
+            target_name: Some("Python".to_string()),
+            outcome_title: Some("Installed".to_string()),
+            outcome_detail: Some("Done".to_string()),
+            next_step: Some("Activate".to_string()),
+            timestamp: "2024-01-01T00:00:00Z".to_string(),
+        };
+
+        storage.save_job(&job).unwrap();
+        let snapshot = storage.load().unwrap();
+        assert_eq!(snapshot.jobs.len(), 1);
+        assert_eq!(snapshot.jobs[0].id, "test-1");
+        assert_eq!(snapshot.jobs[0].family.as_deref(), Some("Python"));
+    }
+
+    #[test]
+    fn save_job_trims_to_12() {
+        let storage = temp_storage();
+
+        for i in 0..15 {
+            let job = JobRecord {
+                id: format!("job-{i}"),
+                label: format!("Job {i}"),
+                status: "completed".to_string(),
+                family: None,
+                version: None,
+                category: None,
+                target_name: None,
+                outcome_title: None,
+                outcome_detail: None,
+                next_step: None,
+                timestamp: format!("2024-01-{:02}", i + 1),
+            };
+            storage.save_job(&job).unwrap();
+        }
+
+        let snapshot = storage.load().unwrap();
+        assert!(snapshot.jobs.len() <= 12, "should keep at most 12 jobs, got {}", snapshot.jobs.len());
+    }
+
+    #[test]
+    fn set_setting_and_load() {
+        let storage = temp_storage();
+
+        storage.set_setting("test_key", Some("test_value")).unwrap();
+        let snapshot = storage.load().unwrap();
+        // Settings are loaded by key name, test_key won't match the known keys
+        // But we can verify it was stored by checking raw
+        let conn = storage.connection().unwrap();
+        let value: String = conn
+            .query_row("SELECT value FROM settings WHERE key = 'test_key'", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(value, "test_value");
+    }
+
+    #[test]
+    fn set_setting_delete() {
+        let storage = temp_storage();
+
+        storage.set_setting("to_delete", Some("value")).unwrap();
+        storage.set_setting("to_delete", None).unwrap();
+
+        let conn = storage.connection().unwrap();
+        let count: i32 = conn
+            .query_row(
+                "SELECT COUNT(*) FROM settings WHERE key = 'to_delete'",
+                [],
+                |row| row.get(0),
+            )
+            .unwrap();
+        assert_eq!(count, 0);
+    }
+
+    #[test]
+    fn ensure_job_column_adds_new_column() {
+        let conn = Connection::open_in_memory().unwrap();
+        conn.execute_batch("CREATE TABLE jobs (id TEXT PRIMARY KEY, label TEXT NOT NULL)")
+            .unwrap();
+
+        ensure_job_column(&conn, "category", "TEXT NULL").unwrap();
+
+        // Verify column exists
+        let mut stmt = conn.prepare("PRAGMA table_info(jobs)").unwrap();
+        let columns: Vec<String> = stmt
+            .query_map([], |row| row.get::<_, String>(1))
+            .unwrap()
+            .filter_map(|r| r.ok())
+            .collect();
+        assert!(columns.contains(&"category".to_string()));
+    }
+
+    #[test]
+    fn ensure_job_column_is_idempotent() {
+        let conn = Connection::open_in_memory().unwrap();
+        conn.execute_batch("CREATE TABLE jobs (id TEXT PRIMARY KEY, label TEXT NOT NULL, category TEXT NULL)")
+            .unwrap();
+
+        // Should not error even though column already exists
+        ensure_job_column(&conn, "category", "TEXT NULL").unwrap();
+    }
+}
