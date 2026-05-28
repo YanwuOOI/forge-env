@@ -1,6 +1,7 @@
 use std::sync::MutexGuard;
 use std::{env, path::PathBuf};
 
+use log::{error, info, warn};
 use tauri::{AppHandle, Emitter, State};
 
 use crate::{
@@ -78,6 +79,7 @@ fn lock_memory_state<'a>(
     state: &'a SharedState,
 ) -> Result<MutexGuard<'a, crate::state::MemoryState>, String> {
     state.inner.lock().map_err(|_| {
+        error!("Failed to acquire shared state lock — possible deadlock");
         AppCommandError::new(
             AppCommandErrorKind::StateUnavailable,
             "Failed to lock shared state.",
@@ -174,6 +176,7 @@ fn failed_job_record(
 fn emit_jobs(app: &AppHandle, state: &SharedState) -> Result<(), String> {
     let jobs = lock_memory_state(state)?.jobs();
     app.emit("jobs://updated", jobs).map_err(|error| {
+        error!("Failed to emit jobs://updated event: {error}");
         AppCommandError::new(AppCommandErrorKind::EventEmitFailed, error.to_string()).to_message()
     })
 }
@@ -417,6 +420,7 @@ pub fn runtimes_install(
     ) {
         Ok(outcome) => outcome,
         Err(error) => {
+            error!("Runtime install failed: {family} {version} on {host_id}: {}", error.message);
             {
                 let mut state = state
                     .inner

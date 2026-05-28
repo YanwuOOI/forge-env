@@ -1,5 +1,6 @@
 use std::{fs, path::PathBuf};
 
+use log::{error, warn};
 use rusqlite::{params, Connection};
 
 use super::{models::JobRecord, shell};
@@ -19,9 +20,15 @@ pub struct Storage {
 
 impl Storage {
     pub fn new() -> Result<Self, String> {
-        let home = shell::home_dir().ok_or_else(|| "Cannot resolve home directory.".to_string())?;
+        let home = shell::home_dir().ok_or_else(|| {
+            error!("Cannot resolve home directory — HOME and USERPROFILE are unset");
+            "Cannot resolve home directory.".to_string()
+        })?;
         let dir = PathBuf::from(home).join(".forge-env");
-        fs::create_dir_all(&dir).map_err(|error| error.to_string())?;
+        fs::create_dir_all(&dir).map_err(|error| {
+            error!("Failed to create data directory {}: {error}", dir.display());
+            error.to_string()
+        })?;
         let db_path = dir.join("forge-env.db");
         let storage = Self { db_path };
         storage.initialize()?;
