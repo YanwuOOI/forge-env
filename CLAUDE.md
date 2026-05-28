@@ -32,9 +32,22 @@ npm run release:all      # Preflight + build + manifest
 
 ```
 src/                     # React frontend
-  App.tsx                # Monolith (2937 lines) — 6 views + helpers
-  lib/api.ts             # Tauri invoke bridge + browser mock (~2000 lines)
-  lib/types.ts           # TypeScript interfaces
+  App.tsx                # Root orchestrator (state + routing, ~480 lines)
+  components/
+    layout/              # Sidebar, TopBar, JobQueue, RuntimePolicyCard
+    overview/            # OverviewSection
+    hosts/               # HostsSection
+    languages/           # LanguagesSection
+    projects/            # ProjectsSection, ProjectPolicyEditor
+    system-deps/         # SystemDepsSection
+    settings/            # SettingsSection
+    shared/              # MetricTile, MetricPanel, NavGlyph, RuntimeHealthBadge
+  lib/
+    api.ts               # Tauri invoke bridge + API object (~96 lines)
+    mock.ts              # Browser preview mock data + browserInvoke (~1872 lines)
+    types.ts             # TypeScript interfaces
+    constants.ts         # CSS class tokens, nav items, base dependencies
+    utils.ts             # confirmMutation, formatBytes, job/import helpers
   styles/index.css       # Global CSS (imports tokens.css + Tailwind)
 
 src-tauri/               # Rust backend
@@ -66,7 +79,7 @@ design-system/           # Visual tokens
 
 - All Rust structs use `#[serde(rename_all = "camelCase")]` for JS interop
 - Frontend uses Tauri `invoke()` for all backend calls
-- Browser preview mode uses mock data in `api.ts` (no Tauri needed)
+- Browser preview mode uses mock data in `lib/mock.ts` (no Tauri needed)
 - 6 views: Overview, Hosts, Languages, Projects, SystemDeps, Settings
 - Navigation via `activeView` state (no router)
 - All mutations emit `jobs://updated` event to frontend
