@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
@@ -23,6 +24,7 @@
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/vite": "^4.1.13",
     "@tauri-apps/cli": "^2.8.4",
     "@testing-library/jest-dom": "^6.9.1",
