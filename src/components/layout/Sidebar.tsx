@@ -3,6 +3,7 @@ import type { NavKey } from '../../lib/types';
 import { navItems, panelClass, insetClass, cardClass } from '../../lib/constants';
 import { MetricTile } from '../shared/MetricTile';
 import { NavGlyph } from '../shared/NavGlyph';
+import { ThemeToggle } from '../shared/ThemeToggle';
 
 interface SidebarProps {
   activeView: NavKey;
@@ -10,15 +11,20 @@ interface SidebarProps {
   hostsCount: number;
   totalInstalledRuntimes: number;
   busyLabel: string | null;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 }
 
-export function Sidebar({ activeView, setActiveView, hostsCount, totalInstalledRuntimes, busyLabel }: SidebarProps) {
+export function Sidebar({ activeView, setActiveView, hostsCount, totalInstalledRuntimes, busyLabel, theme, onToggleTheme }: SidebarProps) {
   return (
     <aside className={`${panelClass} flex flex-col gap-4 p-4`}>
       <div className="rounded-[var(--radius-md)] bg-[linear-gradient(145deg,rgba(255,255,255,0.55),rgba(220,231,255,0.55))] p-4 shadow-[var(--shadow-raised-sm)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--text-muted)]">
-          Forge Env
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--text-muted)]">
+            Forge Env
+          </p>
+          <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        </div>
         <h1 className="mt-2 text-[28px] font-semibold leading-[1.05] text-[var(--text-primary)]">
           Soft industrial control room for runtimes.
         </h1>

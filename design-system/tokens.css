@@ -69,3 +69,37 @@
 [data-theme="light"] {
   color-scheme: light;
 }
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-canvas: #1a1f2e;
+  --bg-panel: #212738;
+  --bg-elevated: #282e42;
+  --bg-inset: #171c2b;
+
+  --text-primary: #e8ecf2;
+  --text-secondary: #9aa3b6;
+  --text-muted: #6b7589;
+
+  --border-soft: #2e3650;
+
+  --accent-primary: #5b8aff;
+  --accent-hover: #7da3ff;
+  --accent-soft: rgba(91, 138, 255, 0.18);
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --info: #60a5fa;
+
+  --focus-ring: rgba(91, 138, 255, 0.45);
+  --scrim: rgba(0, 0, 0, 0.45);
+
+  --shadow-raised-sm: 4px 4px 8px rgba(0, 0, 0, 0.35),
+    -4px -4px 8px rgba(50, 58, 82, 0.25);
+  --shadow-raised-md: 8px 8px 16px rgba(0, 0, 0, 0.4),
+    -8px -8px 16px rgba(50, 58, 82, 0.3);
+  --shadow-inset: inset 3px 3px 6px rgba(0, 0, 0, 0.35),
+    inset -3px -3px 6px rgba(50, 58, 82, 0.25);
+}

@@ -10,6 +10,7 @@ import { api } from './lib/api';
 import { baseDependencies } from './lib/constants';
 import { filterJobsForView, defaultSelectedImportActionIds, draftsFromServiceConfigs, draftsFromServiceArtifacts } from './lib/utils';
 import { useConfirm } from './lib/hooks/useConfirm';
+import { useTheme } from './lib/hooks/useTheme';
 import type {
   EnvPlan,
   ExportBundle,
@@ -71,6 +72,7 @@ function projectAlignLabel(family: string, version: string) {
 
 function App() {
   const confirm = useConfirm();
+  const { theme, toggleTheme } = useTheme();
   const [activeView, setActiveView] = useState<NavKey>('overview');
   const [hosts, setHosts] = useState<HostSummary[]>([]);
   const [runtimes, setRuntimes] = useState<RuntimeFamilyState[]>([]);
@@ -210,6 +212,8 @@ function App() {
           hostsCount={hosts.length}
           totalInstalledRuntimes={totalInstalledRuntimes}
           busyLabel={busyLabel}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
 
         <main className={`${panelClass} flex min-w-0 flex-col p-4 md:p-5`}>
