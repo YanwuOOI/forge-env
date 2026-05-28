@@ -1,0 +1,71 @@
+:root {
+  color-scheme: light;
+
+  --bg-canvas: #e7ecf3;
+  --bg-panel: #edf2f8;
+  --bg-elevated: #f4f7fb;
+  --bg-inset: #e3e9f2;
+
+  --text-primary: #1f2937;
+  --text-secondary: #5b6778;
+  --text-muted: #7f8a9a;
+
+  --border-soft: #d8e0ea;
+
+  --accent-primary: #2f6bff;
+  --accent-hover: #255ae0;
+  --accent-soft: #dce7ff;
+
+  --success: #1f9d68;
+  --warning: #d18a1d;
+  --danger: #d14b5a;
+  --info: #2a8ccf;
+
+  --focus-ring: rgba(47, 107, 255, 0.38);
+  --scrim: rgba(31, 41, 55, 0.18);
+
+  --font-ui: "Manrope", "SF Pro Text", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+
+  --text-12: 0.75rem;
+  --text-14: 0.875rem;
+  --text-16: 1rem;
+  --text-20: 1.25rem;
+  --text-24: 1.5rem;
+  --text-32: 2rem;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  --shadow-raised-sm: 4px 4px 8px rgba(163, 177, 198, 0.32),
+    -4px -4px 8px rgba(255, 255, 255, 0.85);
+  --shadow-raised-md: 8px 8px 16px rgba(163, 177, 198, 0.34),
+    -8px -8px 16px rgba(255, 255, 255, 0.88);
+  --shadow-inset: inset 3px 3px 6px rgba(163, 177, 198, 0.3),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.82);
+
+  --motion-hover: 160ms;
+  --motion-press: 120ms;
+  --motion-panel-enter: 220ms;
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}

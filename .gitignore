@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.DS_Store
+
+src-tauri/target/
+src-tauri/gen/
+release/
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/settings.json
+.idea/
+
+# OS
+Thumbs.db
