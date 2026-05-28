@@ -76,6 +76,24 @@ export function JobQueue({ jobs, activeView, jobFilterMode, setJobFilterMode, pe
               ) : (
                 <p className="mt-2 text-[12px] leading-5 text-[var(--text-secondary)]">{job.label}</p>
               )}
+              {job.progress != null && job.status === 'running' ? (
+                <div className="mt-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] text-[var(--text-muted)]">
+                      {job.progressLabel ?? 'Processing...'}
+                    </span>
+                    <span className="font-mono text-[11px] text-[var(--text-muted)]">
+                      {Math.round(job.progress * 100)}%
+                    </span>
+                  </div>
+                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[var(--bg-canvas)]">
+                    <div
+                      className="h-full rounded-full bg-[var(--accent-primary)] transition-all duration-300"
+                      style={{ width: `${Math.round(job.progress * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              ) : null}
               {job.nextStep ? (
                 <p className="mt-2 text-[12px] leading-5 text-[var(--text-muted)]">Next: {job.nextStep}</p>
               ) : null}

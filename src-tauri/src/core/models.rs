@@ -131,6 +131,10 @@ pub struct JobRecord {
     #[serde(default)]
     pub next_step: Option<String>,
     pub timestamp: String,
+    #[serde(default)]
+    pub progress: Option<f32>,
+    #[serde(default)]
+    pub progress_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

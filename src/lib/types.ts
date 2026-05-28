@@ -105,6 +105,8 @@ export interface JobRecord {
   outcomeDetail?: string | null;
   nextStep?: string | null;
   timestamp: string;
+  progress?: number | null;
+  progressLabel?: string | null;
 }
 
 export interface ExportBundle {

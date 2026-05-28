@@ -46,6 +46,8 @@ impl MemoryState {
                 outcome_detail: None,
                 next_step: None,
                 timestamp: timestamp(),
+                progress: None,
+                progress_label: None,
             });
         }
 
@@ -198,6 +200,8 @@ impl MemoryState {
             outcome_detail: outcome_detail.map(ToOwned::to_owned),
             next_step: next_step.map(ToOwned::to_owned),
             timestamp: timestamp(),
+            progress: None,
+            progress_label: None,
         };
 
         self.jobs.insert(0, job.clone());

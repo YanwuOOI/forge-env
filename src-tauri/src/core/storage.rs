@@ -53,7 +53,7 @@ impl Storage {
 
         let mut jobs = connection
             .prepare(
-                "SELECT id, label, status, family, version, category, target_name, outcome_title, outcome_detail, next_step, timestamp
+                "SELECT id, label, status, family, version, category, target_name, outcome_title, outcome_detail, next_step, timestamp, progress, progress_label
                  FROM jobs
                  ORDER BY rowid DESC
                  LIMIT 12",
@@ -73,6 +73,8 @@ impl Storage {
                     outcome_detail: row.get(8)?,
                     next_step: row.get(9)?,
                     timestamp: row.get(10)?,
+                    progress: row.get(11)?,
+                    progress_label: row.get(12)?,
                 })
             })
             .map_err(|error| error.to_string())?;
@@ -88,8 +90,8 @@ impl Storage {
         let connection = self.connection()?;
         connection
             .execute(
-                "INSERT OR REPLACE INTO jobs (id, label, status, family, version, category, target_name, outcome_title, outcome_detail, next_step, timestamp)
-                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
+                "INSERT OR REPLACE INTO jobs (id, label, status, family, version, category, target_name, outcome_title, outcome_detail, next_step, timestamp, progress, progress_label)
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)",
                 params![
                     job.id,
                     job.label,
@@ -101,7 +103,9 @@ impl Storage {
                     job.outcome_title,
                     job.outcome_detail,
                     job.next_step,
-                    job.timestamp
+                    job.timestamp,
+                    job.progress,
+                    job.progress_label
                 ],
             )
             .map_err(|error| error.to_string())?;
@@ -166,6 +170,8 @@ impl Storage {
         ensure_job_column(&connection, "outcome_title", "TEXT NULL")?;
         ensure_job_column(&connection, "outcome_detail", "TEXT NULL")?;
         ensure_job_column(&connection, "next_step", "TEXT NULL")?;
+        ensure_job_column(&connection, "progress", "REAL NULL")?;
+        ensure_job_column(&connection, "progress_label", "TEXT NULL")?;
 
         Ok(())
     }
@@ -265,6 +271,8 @@ mod tests {
             outcome_detail: Some("Done".to_string()),
             next_step: Some("Activate".to_string()),
             timestamp: "2024-01-01T00:00:00Z".to_string(),
+            progress: None,
+            progress_label: None,
         };
 
         storage.save_job(&job).unwrap();
@@ -291,6 +299,8 @@ mod tests {
                 outcome_detail: None,
                 next_step: None,
                 timestamp: format!("2024-01-{:02}", i + 1),
+                progress: None,
+                progress_label: None,
             };
             storage.save_job(&job).unwrap();
         }
