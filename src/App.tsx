@@ -11,6 +11,7 @@ import { baseDependencies } from './lib/constants';
 import { filterJobsForView, defaultSelectedImportActionIds, draftsFromServiceConfigs, draftsFromServiceArtifacts } from './lib/utils';
 import { useConfirm } from './lib/hooks/useConfirm';
 import { useTheme } from './lib/hooks/useTheme';
+import { useUpdater } from './lib/hooks/useUpdater';
 import type {
   EnvPlan,
   ExportBundle,
@@ -39,6 +40,7 @@ import { LanguagesSection } from './components/languages/LanguagesSection';
 import { ProjectsSection } from './components/projects/ProjectsSection';
 import { SystemDepsSection } from './components/system-deps/SystemDepsSection';
 import { SettingsSection } from './components/settings/SettingsSection';
+import { UpdateBanner } from './components/shared/UpdateBanner';
 
 import { panelClass, cardClass } from './lib/constants';
 
@@ -73,6 +75,7 @@ function projectAlignLabel(family: string, version: string) {
 function App() {
   const confirm = useConfirm();
   const { theme, toggleTheme } = useTheme();
+  const { updateInfo, downloading, installUpdate, dismissUpdate } = useUpdater();
   const [activeView, setActiveView] = useState<NavKey>('overview');
   const [hosts, setHosts] = useState<HostSummary[]>([]);
   const [runtimes, setRuntimes] = useState<RuntimeFamilyState[]>([]);
@@ -226,6 +229,18 @@ function App() {
           {error ? (
             <div className="mt-4 rounded-[var(--radius-md)] bg-[rgba(209,75,90,0.12)] px-4 py-3 text-[13px] text-[var(--danger)]">
               {error}
+            </div>
+          ) : null}
+
+          {updateInfo ? (
+            <div className="mt-4">
+              <UpdateBanner
+                version={updateInfo.version}
+                body={updateInfo.body}
+                downloading={downloading}
+                onInstall={installUpdate}
+                onDismiss={dismissUpdate}
+              />
             </div>
           ) : null}
 
