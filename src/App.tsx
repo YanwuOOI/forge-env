@@ -12,6 +12,7 @@ import { filterJobsForView, defaultSelectedImportActionIds, draftsFromServiceCon
 import { useConfirm } from './lib/hooks/useConfirm';
 import { useTheme } from './lib/hooks/useTheme';
 import { useUpdater } from './lib/hooks/useUpdater';
+import { useToast } from './lib/hooks/useToast';
 import type {
   EnvPlan,
   ExportBundle,
@@ -74,6 +75,7 @@ function projectAlignLabel(family: string, version: string) {
 
 function App() {
   const confirm = useConfirm();
+  const toast = useToast();
   const { theme, toggleTheme } = useTheme();
   const { updateInfo, downloading, installUpdate, dismissUpdate } = useUpdater();
   const [activeView, setActiveView] = useState<NavKey>('overview');
@@ -191,12 +193,12 @@ function App() {
 
   const runAction = useEffectEvent(async (label: string, action: () => Promise<unknown>) => {
     setBusyLabel(label);
-    setError(null);
     try {
       await action();
       await refreshAll();
     } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : `${label} failed.`);
+      const msg = actionError instanceof Error ? actionError.message : `${label} failed.`;
+      toast.error(msg);
     } finally {
       setBusyLabel(null);
     }
