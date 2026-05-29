@@ -16,7 +16,9 @@
     "release:check": "node scripts/release/check-release-env.mjs",
     "release:bundle": "npm run release:check && tauri build",
     "release:manifest": "node scripts/release/collect-release-assets.mjs",
-    "release:all": "npm run release:bundle && npm run release:manifest"
+    "release:notarize": "node scripts/release/notarize.mjs",
+    "release:publish": "node scripts/release/publish-release.mjs",
+    "release:all": "npm run release:bundle && npm run release:notarize && npm run release:manifest && npm run release:publish"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.8.0",

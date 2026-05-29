@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2F6BFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3fa0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="inner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#DCE7FF;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+
+  <!-- Inner glow -->
+  <rect x="8" y="8" width="496" height="496" rx="88" fill="url(#inner)"/>
+
+  <!-- Terminal bracket left -->
+  <path d="M140 160 L80 256 L140 352" stroke="white" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Terminal bracket right -->
+  <path d="M372 160 L432 256 L372 352" stroke="white" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Center dot -->
+  <circle cx="256" cy="256" r="16" fill="white"/>
+
+  <!-- Horizontal line -->
+  <line x1="176" y1="256" x2="224" y2="256" stroke="white" stroke-width="24" stroke-linecap="round"/>
+  <line x1="288" y1="256" x2="336" y2="256" stroke="white" stroke-width="24" stroke-linecap="round"/>
+</svg>
