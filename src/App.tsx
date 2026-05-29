@@ -25,6 +25,8 @@ import { LanguagesSection } from './components/languages/LanguagesSection';
 import { ProjectsSection } from './components/projects/ProjectsSection';
 import { SystemDepsSection } from './components/system-deps/SystemDepsSection';
 import { SettingsSection } from './components/settings/SettingsSection';
+import { ErrorBoundary } from './components/shared/ErrorBoundary';
+import { ConnectionStatus } from './components/shared/ConnectionStatus';
 
 import { panelClass, cardClass } from './lib/constants';
 
@@ -131,6 +133,8 @@ function App() {
             </div>
           ) : null}
 
+          <ConnectionStatus />
+
           {updateInfo ? (
             <div className="mt-4 rounded-[var(--radius-md)] bg-[rgba(47,107,255,0.10)] px-4 py-3 text-[13px]">
               <div className="flex flex-wrap items-center justify-between gap-3">
@@ -163,213 +167,225 @@ function App() {
           ) : (
             <section className="mt-4 flex-1 overflow-auto">
               {activeView === 'overview' ? (
-                <OverviewSection
-                  hosts={ws.hosts}
-                  runtimes={ws.runtimes}
-                  jobs={ws.jobs}
-                  onMirrorApply={async () => {
-                    if (await confirm(`Apply the ${ws.mirrorPreset} mirror preset to npm, pip, and Cargo config on this host?`)) {
-                      await runAction(`Apply ${ws.mirrorPreset} mirror preset`, () =>
-                        api.mirrorsApply(activeHost?.id ?? 'native', ws.mirrorPreset),
-                      );
-                    }
-                  }}
-                  mirrorPreset={ws.mirrorPreset}
-                  setMirrorPreset={ws.setMirrorPreset}
-                />
+                <ErrorBoundary label="Overview">
+                  <OverviewSection
+                    hosts={ws.hosts}
+                    runtimes={ws.runtimes}
+                    jobs={ws.jobs}
+                    onMirrorApply={async () => {
+                      if (await confirm(`Apply the ${ws.mirrorPreset} mirror preset to npm, pip, and Cargo config on this host?`)) {
+                        await runAction(`Apply ${ws.mirrorPreset} mirror preset`, () =>
+                          api.mirrorsApply(activeHost?.id ?? 'native', ws.mirrorPreset),
+                        );
+                      }
+                    }}
+                    mirrorPreset={ws.mirrorPreset}
+                    setMirrorPreset={ws.setMirrorPreset}
+                  />
+                </ErrorBoundary>
               ) : null}
 
               {activeView === 'hosts' ? (
-                <HostsSection
-                  hosts={ws.hosts}
-                  detail={ws.hostDetail}
-                  selectedHostId={ws.selectedHostId}
-                  onSelectHost={(hostId) => runAction(`Inspect ${hostId}`, () => ws.selectHost(hostId))}
-                />
+                <ErrorBoundary label="Hosts">
+                  <HostsSection
+                    hosts={ws.hosts}
+                    detail={ws.hostDetail}
+                    selectedHostId={ws.selectedHostId}
+                    onSelectHost={(hostId) => runAction(`Inspect ${hostId}`, () => ws.selectHost(hostId))}
+                  />
+                </ErrorBoundary>
               ) : null}
 
               {activeView === 'languages' ? (
-                <LanguagesSection
-                  runtimes={ws.runtimes}
-                  onInstall={async (family, version) => {
-                    if (await confirm(`Install ${family} ${version} using its canonical provider on this host?`)) {
-                      await runAction(`Install ${family} ${version}`, () => api.runtimesInstall(activeHost?.id ?? 'native', family, version));
-                    }
-                  }}
-                  onSwitch={async (family, version) => {
-                    if (await confirm(`Activate ${family} ${version} as the default toolchain on this host?`)) {
-                      await runAction(`Activate ${family} ${version}`, () => api.runtimesSwitch(activeHost?.id ?? 'native', family, version));
-                    }
-                  }}
-                  onRemove={async (family, version) => {
-                    if (await confirm(`Remove ${family} ${version} from the canonical provider on this host?`)) {
-                      await runAction(`Remove ${family} ${version}`, () => api.runtimesRemove(activeHost?.id ?? 'native', family, version));
-                    }
-                  }}
-                />
+                <ErrorBoundary label="Languages">
+                  <LanguagesSection
+                    runtimes={ws.runtimes}
+                    onInstall={async (family, version) => {
+                      if (await confirm(`Install ${family} ${version} using its canonical provider on this host?`)) {
+                        await runAction(`Install ${family} ${version}`, () => api.runtimesInstall(activeHost?.id ?? 'native', family, version));
+                      }
+                    }}
+                    onSwitch={async (family, version) => {
+                      if (await confirm(`Activate ${family} ${version} as the default toolchain on this host?`)) {
+                        await runAction(`Activate ${family} ${version}`, () => api.runtimesSwitch(activeHost?.id ?? 'native', family, version));
+                      }
+                    }}
+                    onRemove={async (family, version) => {
+                      if (await confirm(`Remove ${family} ${version} from the canonical provider on this host?`)) {
+                        await runAction(`Remove ${family} ${version}`, () => api.runtimesRemove(activeHost?.id ?? 'native', family, version));
+                      }
+                    }}
+                  />
+                </ErrorBoundary>
               ) : null}
 
               {activeView === 'projects' ? (
-                <ProjectsSection
-                  runtimes={ws.runtimes}
-                  query={projectQuery}
-                  setQuery={setProjectQuery}
-                  projects={filteredProjects}
-                  onAlign={async (projectPath, family, version, options) => {
-                    if (await confirm(projectAlignPrompt(family, version, options))) {
-                      await runAction(projectAlignLabel(family, version), () =>
-                        family === '.NET' || family === 'C/C++'
-                          ? api.projectRuntimeApply(activeHost?.id ?? 'native', projectPath, family, version, options)
-                          : api.runtimesInstall(activeHost?.id ?? 'native', family, version)
-                      );
-                    }
-                  }}
-                />
+                <ErrorBoundary label="Projects">
+                  <ProjectsSection
+                    runtimes={ws.runtimes}
+                    query={projectQuery}
+                    setQuery={setProjectQuery}
+                    projects={filteredProjects}
+                    onAlign={async (projectPath, family, version, options) => {
+                      if (await confirm(projectAlignPrompt(family, version, options))) {
+                        await runAction(projectAlignLabel(family, version), () =>
+                          family === '.NET' || family === 'C/C++'
+                            ? api.projectRuntimeApply(activeHost?.id ?? 'native', projectPath, family, version, options)
+                            : api.runtimesInstall(activeHost?.id ?? 'native', family, version)
+                        );
+                      }
+                    }}
+                  />
+                </ErrorBoundary>
               ) : null}
 
               {activeView === 'deps' ? (
-                <SystemDepsSection
-                  dependencies={ws.dependencies}
-                  services={ws.services}
-                  serviceArtifacts={ws.serviceArtifacts}
-                  jobs={ws.jobs}
-                  serviceConfigs={ws.serviceConfigs}
-                  serviceConfigDrafts={ws.serviceConfigDrafts}
-                  setServiceConfigDrafts={ws.setServiceConfigDrafts}
-                  serviceRestoreDrafts={ws.serviceRestoreDrafts}
-                  setServiceRestoreDrafts={ws.setServiceRestoreDrafts}
-                  onInstallTemplate={async () => {
-                    if (await confirm('Install the base system dependency template through the detected package manager?')) {
-                      await runAction('Install base dependency template', () => api.depsInstall(activeHost?.id ?? 'native', baseDependencies));
-                    }
-                  }}
-                  onServiceAction={async (name, action) => {
-                    if (await confirm(`${action} ${name} on this host now?`)) {
-                      await runAction(`${action} ${name}`, () => api.serviceAction(activeHost?.id ?? 'native', name, action));
-                    }
-                  }}
-                  onApplyServiceConfig={async (name, port, dataDir) => {
-                    if (await confirm(`Write the managed ${name} service override block on this host now?`)) {
-                      await runAction(`Apply ${name} config`, () => api.serviceConfigApply(activeHost?.id ?? 'native', name, port, dataDir));
-                    }
-                  }}
-                  onApplyServiceConfigAndRestart={async (name, port, dataDir) => {
-                    if (await confirm(`Write the managed ${name} service override block and reconcile the service process on this host now?`)) {
-                      await runAction(`Apply ${name} config and reconcile service`, () => api.serviceConfigApplyAndRestart(activeHost?.id ?? 'native', name, port, dataDir));
-                    }
-                  }}
-                  onCreateServiceBackup={async (name) => {
-                    if (await confirm(`Create a stopped-service snapshot backup for ${name} on this host now?`)) {
-                      await runAction(`Create ${name} snapshot backup`, () => api.serviceBackupCreate(activeHost?.id ?? 'native', name));
-                    }
-                  }}
-                  onCreateServiceLogicalBackup={async (name) => {
-                    if (await confirm(`Create a logical backup artifact for ${name} on this host now?`)) {
-                      await runAction(`Create ${name} logical backup`, () => api.serviceLogicalBackupCreate(activeHost?.id ?? 'native', name));
-                    }
-                  }}
-                  onExportServiceData={async (name) => {
-                    if (await confirm(`Export the current stopped-service data directory for ${name} on this host now?`)) {
-                      await runAction(`Export ${name} data directory`, () => api.serviceDataExport(activeHost?.id ?? 'native', name));
-                    }
-                  }}
-                  onRestoreServiceBackup={async (name, archivePath) => {
-                    if (await confirm(`Restore ${name} from ${archivePath?.trim() ? 'the selected archive path' : 'the latest managed backup'} on this host now?`)) {
-                      await runAction(`Restore ${name} snapshot backup`, () => api.serviceBackupRestore(activeHost?.id ?? 'native', name, archivePath?.trim() ? archivePath.trim() : null));
-                    }
-                  }}
-                  onValidateServiceArtifact={async (path) => {
-                    if (await confirm(`Validate the selected service artifact now?\n\n${path}`)) {
-                      await runAction('Validate service artifact', () => api.serviceArtifactValidate(activeHost?.id ?? 'native', path));
-                    }
-                  }}
-                  onDeleteServiceArtifact={async (path) => {
-                    if (await confirm(`Delete the selected managed service artifact now?\n\n${path}`, { danger: true })) {
-                      await runAction('Delete service artifact', () => api.serviceArtifactDelete(activeHost?.id ?? 'native', path));
-                    }
-                  }}
-                />
+                <ErrorBoundary label="System Deps">
+                  <SystemDepsSection
+                    dependencies={ws.dependencies}
+                    services={ws.services}
+                    serviceArtifacts={ws.serviceArtifacts}
+                    jobs={ws.jobs}
+                    serviceConfigs={ws.serviceConfigs}
+                    serviceConfigDrafts={ws.serviceConfigDrafts}
+                    setServiceConfigDrafts={ws.setServiceConfigDrafts}
+                    serviceRestoreDrafts={ws.serviceRestoreDrafts}
+                    setServiceRestoreDrafts={ws.setServiceRestoreDrafts}
+                    onInstallTemplate={async () => {
+                      if (await confirm('Install the base system dependency template through the detected package manager?')) {
+                        await runAction('Install base dependency template', () => api.depsInstall(activeHost?.id ?? 'native', baseDependencies));
+                      }
+                    }}
+                    onServiceAction={async (name, action) => {
+                      if (await confirm(`${action} ${name} on this host now?`)) {
+                        await runAction(`${action} ${name}`, () => api.serviceAction(activeHost?.id ?? 'native', name, action));
+                      }
+                    }}
+                    onApplyServiceConfig={async (name, port, dataDir) => {
+                      if (await confirm(`Write the managed ${name} service override block on this host now?`)) {
+                        await runAction(`Apply ${name} config`, () => api.serviceConfigApply(activeHost?.id ?? 'native', name, port, dataDir));
+                      }
+                    }}
+                    onApplyServiceConfigAndRestart={async (name, port, dataDir) => {
+                      if (await confirm(`Write the managed ${name} service override block and reconcile the service process on this host now?`)) {
+                        await runAction(`Apply ${name} config and reconcile service`, () => api.serviceConfigApplyAndRestart(activeHost?.id ?? 'native', name, port, dataDir));
+                      }
+                    }}
+                    onCreateServiceBackup={async (name) => {
+                      if (await confirm(`Create a stopped-service snapshot backup for ${name} on this host now?`)) {
+                        await runAction(`Create ${name} snapshot backup`, () => api.serviceBackupCreate(activeHost?.id ?? 'native', name));
+                      }
+                    }}
+                    onCreateServiceLogicalBackup={async (name) => {
+                      if (await confirm(`Create a logical backup artifact for ${name} on this host now?`)) {
+                        await runAction(`Create ${name} logical backup`, () => api.serviceLogicalBackupCreate(activeHost?.id ?? 'native', name));
+                      }
+                    }}
+                    onExportServiceData={async (name) => {
+                      if (await confirm(`Export the current stopped-service data directory for ${name} on this host now?`)) {
+                        await runAction(`Export ${name} data directory`, () => api.serviceDataExport(activeHost?.id ?? 'native', name));
+                      }
+                    }}
+                    onRestoreServiceBackup={async (name, archivePath) => {
+                      if (await confirm(`Restore ${name} from ${archivePath?.trim() ? 'the selected archive path' : 'the latest managed backup'} on this host now?`)) {
+                        await runAction(`Restore ${name} snapshot backup`, () => api.serviceBackupRestore(activeHost?.id ?? 'native', name, archivePath?.trim() ? archivePath.trim() : null));
+                      }
+                    }}
+                    onValidateServiceArtifact={async (path) => {
+                      if (await confirm(`Validate the selected service artifact now?\n\n${path}`)) {
+                        await runAction('Validate service artifact', () => api.serviceArtifactValidate(activeHost?.id ?? 'native', path));
+                      }
+                    }}
+                    onDeleteServiceArtifact={async (path) => {
+                      if (await confirm(`Delete the selected managed service artifact now?\n\n${path}`, { danger: true })) {
+                        await runAction('Delete service artifact', () => api.serviceArtifactDelete(activeHost?.id ?? 'native', path));
+                      }
+                    }}
+                  />
+                </ErrorBoundary>
               ) : null}
 
               {activeView === 'settings' ? (
-                <SettingsSection
-                  hostDetail={ws.hostDetail}
-                  envPlan={ws.envPlan}
-                  envTargetProfile={ws.envTargetProfile}
-                  exportBundle={exportBundle}
-                  importDraft={importDraft}
-                  importResult={importResult}
-                  setEnvTargetProfile={ws.setEnvTargetProfile}
-                  setImportDraft={setImportDraft}
-                  onRefreshEnvPlan={() => runAction('Refresh environment plan', () => ws.updateEnvPlan())}
-                  onApplyEnvPlan={async () => {
-                    if (await confirm(`Write the managed Forge Env shell block to ${ws.envTargetProfile || ws.envPlan?.targetProfile || 'the selected profile'}?`)) {
-                      await runAction('Apply environment shell block', () =>
-                        api.envApply(activeHost?.id ?? 'native', ws.envTargetProfile || ws.envPlan?.targetProfile || '~/.profile'),
-                      );
-                    }
-                  }}
-                  onExport={() => runAction('Generate export bundle', async () => {
-                    const bundle = await api.envExport(activeHost?.id ?? 'native');
-                    setExportBundle(bundle);
-                  })}
-                  onImport={() => runAction('Validate import bundle', async () => {
-                    const result = await api.envImport(importDraft);
-                    setImportResult(result);
-                    setSelectedImportActionIds(defaultSelectedImportActionIds(result));
-                  })}
-                  onApplyImport={async () => {
-                    if (await confirm('Apply the planned import actions to the matching local hosts now?')) {
-                      await runAction('Apply import plan', async () => {
-                        const result = await api.envImportApply(importDraft, selectedImportActionIds);
-                        setImportResult(result);
-                        setSelectedImportActionIds(defaultSelectedImportActionIds(result));
-                      });
-                    }
-                  }}
-                  proxySettings={proxySettings}
-                  setProxySettings={setProxySettings}
-                  proxyPasswordDraft={proxyPasswordDraft}
-                  setProxyPasswordDraft={setProxyPasswordDraft}
-                  onSaveProxySettings={async () => {
-                    if (await confirm(`Save the managed proxy profile and update the ${proxySettings.secureStore} credential entry now?`)) {
-                      await runAction('Save proxy profile', async () => {
-                        await api.proxySettingsSave(proxySettings, proxyPasswordDraft.trim() ? proxyPasswordDraft : null);
-                        setProxyPasswordDraft('');
-                      });
-                    }
-                  }}
-                  onClearProxySettings={async () => {
-                    if (await confirm(`Clear the managed proxy profile and remove any saved ${proxySettings.secureStore} credential entry now?`)) {
-                      await runAction('Clear proxy profile', async () => {
-                        await api.proxySettingsClear();
-                        setProxyPasswordDraft('');
-                      });
-                    }
-                  }}
-                  onRepairImportAction={async (action) => {
-                    if (!action.family) return;
-                    if (await confirm(`Bootstrap the canonical ${action.family} provider on ${action.hostLabel} now, then automatically continue the related import actions?`)) {
-                      await runAction(`Repair ${action.family} provider on ${action.hostLabel}`, async () => {
-                        await api.providerBootstrap(action.hostId, action.family!);
-                        const repairedPlan = await api.envImport(importDraft);
-                        const followUpActionIds = repairedPlan.actions
-                          .filter((nextAction) => nextAction.status === 'planned' && nextAction.hostId === action.hostId && nextAction.family === action.family)
-                          .map((nextAction) => nextAction.id);
-                        if (!followUpActionIds.length) {
-                          setImportResult(repairedPlan);
-                          setSelectedImportActionIds(defaultSelectedImportActionIds(repairedPlan));
-                          return;
-                        }
-                        const replayedResult = await api.envImportApply(importDraft, followUpActionIds);
-                        setImportResult(replayedResult);
-                        setSelectedImportActionIds(defaultSelectedImportActionIds(replayedResult));
-                      });
-                    }
-                  }}
-                  selectedImportActionIds={selectedImportActionIds}
-                  setSelectedImportActionIds={setSelectedImportActionIds}
-                />
+                <ErrorBoundary label="Settings">
+                  <SettingsSection
+                    hostDetail={ws.hostDetail}
+                    envPlan={ws.envPlan}
+                    envTargetProfile={ws.envTargetProfile}
+                    exportBundle={exportBundle}
+                    importDraft={importDraft}
+                    importResult={importResult}
+                    setEnvTargetProfile={ws.setEnvTargetProfile}
+                    setImportDraft={setImportDraft}
+                    onRefreshEnvPlan={() => runAction('Refresh environment plan', () => ws.updateEnvPlan())}
+                    onApplyEnvPlan={async () => {
+                      if (await confirm(`Write the managed Forge Env shell block to ${ws.envTargetProfile || ws.envPlan?.targetProfile || 'the selected profile'}?`)) {
+                        await runAction('Apply environment shell block', () =>
+                          api.envApply(activeHost?.id ?? 'native', ws.envTargetProfile || ws.envPlan?.targetProfile || '~/.profile'),
+                        );
+                      }
+                    }}
+                    onExport={() => runAction('Generate export bundle', async () => {
+                      const bundle = await api.envExport(activeHost?.id ?? 'native');
+                      setExportBundle(bundle);
+                    })}
+                    onImport={() => runAction('Validate import bundle', async () => {
+                      const result = await api.envImport(importDraft);
+                      setImportResult(result);
+                      setSelectedImportActionIds(defaultSelectedImportActionIds(result));
+                    })}
+                    onApplyImport={async () => {
+                      if (await confirm('Apply the planned import actions to the matching local hosts now?')) {
+                        await runAction('Apply import plan', async () => {
+                          const result = await api.envImportApply(importDraft, selectedImportActionIds);
+                          setImportResult(result);
+                          setSelectedImportActionIds(defaultSelectedImportActionIds(result));
+                        });
+                      }
+                    }}
+                    proxySettings={proxySettings}
+                    setProxySettings={setProxySettings}
+                    proxyPasswordDraft={proxyPasswordDraft}
+                    setProxyPasswordDraft={setProxyPasswordDraft}
+                    onSaveProxySettings={async () => {
+                      if (await confirm(`Save the managed proxy profile and update the ${proxySettings.secureStore} credential entry now?`)) {
+                        await runAction('Save proxy profile', async () => {
+                          await api.proxySettingsSave(proxySettings, proxyPasswordDraft.trim() ? proxyPasswordDraft : null);
+                          setProxyPasswordDraft('');
+                        });
+                      }
+                    }}
+                    onClearProxySettings={async () => {
+                      if (await confirm(`Clear the managed proxy profile and remove any saved ${proxySettings.secureStore} credential entry now?`)) {
+                        await runAction('Clear proxy profile', async () => {
+                          await api.proxySettingsClear();
+                          setProxyPasswordDraft('');
+                        });
+                      }
+                    }}
+                    onRepairImportAction={async (action) => {
+                      if (!action.family) return;
+                      if (await confirm(`Bootstrap the canonical ${action.family} provider on ${action.hostLabel} now, then automatically continue the related import actions?`)) {
+                        await runAction(`Repair ${action.family} provider on ${action.hostLabel}`, async () => {
+                          await api.providerBootstrap(action.hostId, action.family!);
+                          const repairedPlan = await api.envImport(importDraft);
+                          const followUpActionIds = repairedPlan.actions
+                            .filter((nextAction) => nextAction.status === 'planned' && nextAction.hostId === action.hostId && nextAction.family === action.family)
+                            .map((nextAction) => nextAction.id);
+                          if (!followUpActionIds.length) {
+                            setImportResult(repairedPlan);
+                            setSelectedImportActionIds(defaultSelectedImportActionIds(repairedPlan));
+                            return;
+                          }
+                          const replayedResult = await api.envImportApply(importDraft, followUpActionIds);
+                          setImportResult(replayedResult);
+                          setSelectedImportActionIds(defaultSelectedImportActionIds(replayedResult));
+                        });
+                      }
+                    }}
+                    selectedImportActionIds={selectedImportActionIds}
+                    setSelectedImportActionIds={setSelectedImportActionIds}
+                  />
+                </ErrorBoundary>
               ) : null}
             </section>
           )}

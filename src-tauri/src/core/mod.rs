@@ -1,5 +1,6 @@
 pub mod deps;
 pub mod detect;
+pub mod error;
 pub mod environment;
 pub mod execution;
 pub mod hosts;
