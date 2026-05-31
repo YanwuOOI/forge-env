@@ -86,7 +86,14 @@ export function JobQueue({ jobs, activeView, jobFilterMode, setJobFilterMode, pe
                       {Math.round(job.progress * 100)}%
                     </span>
                   </div>
-                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[var(--bg-canvas)]">
+                  <div
+                    className="mt-1 h-1.5 overflow-hidden rounded-full bg-[var(--bg-canvas)]"
+                    role="progressbar"
+                    aria-valuenow={Math.round(job.progress * 100)}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={job.progressLabel ?? 'Processing'}
+                  >
                     <div
                       className="h-full rounded-full bg-[var(--accent-primary)] transition-all duration-300"
                       style={{ width: `${Math.round(job.progress * 100)}%` }}

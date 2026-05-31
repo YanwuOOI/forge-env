@@ -8,7 +8,7 @@ export function ConnectionStatus({ onReconnect }: ConnectionStatusProps) {
   if (isTauri()) return null;
 
   return (
-    <div className="rounded-[var(--radius-md)] bg-[rgba(209,138,29,0.12)] px-4 py-3 text-[13px]">
+    <div className="rounded-[var(--radius-md)] bg-[rgba(209,138,29,0.12)] px-4 py-3 text-[13px]" role="status">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="size-2 rounded-full bg-[var(--warning)]" />

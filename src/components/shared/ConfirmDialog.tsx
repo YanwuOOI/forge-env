@@ -51,14 +51,18 @@ export function ConfirmDialog({
   return (
     <dialog
       ref={dialogRef}
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="confirm-dialog-title"
+      aria-describedby="confirm-dialog-message"
       className="m-auto max-w-[480px] rounded-[var(--radius-lg)] bg-[var(--bg-elevated)] p-0 shadow-[var(--shadow-raised-md)] backdrop:bg-[var(--scrim)]"
       onClick={(e) => {
         if (e.target === dialogRef.current) onCancel();
       }}
     >
       <div className="p-6">
-        <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{title}</h3>
-        <p className="mt-3 text-[13px] leading-6 text-[var(--text-secondary)] whitespace-pre-wrap">{message}</p>
+        <h3 id="confirm-dialog-title" className="text-[18px] font-semibold text-[var(--text-primary)]">{title}</h3>
+        <p id="confirm-dialog-message" className="mt-3 text-[13px] leading-6 text-[var(--text-secondary)] whitespace-pre-wrap">{message}</p>
         <div className="mt-6 flex justify-end gap-3">
           <button type="button" className={buttonSecondaryClass} onClick={onCancel}>
             {cancelLabel}

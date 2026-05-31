@@ -33,7 +33,7 @@ export function Sidebar({ activeView, setActiveView, hostsCount, totalInstalledR
         </p>
       </div>
 
-      <nav className={`${insetClass} flex flex-col gap-2 p-2`}>
+      <nav className={`${insetClass} flex flex-col gap-2 p-2`} aria-label="Main navigation">
         {navItems.map((item) => {
           const active = activeView === item.key;
           return (

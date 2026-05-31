@@ -128,7 +128,7 @@ function App() {
           />
 
           {ws.error ? (
-            <div className="mt-4 rounded-[var(--radius-md)] bg-[rgba(209,75,90,0.12)] px-4 py-3 text-[13px] text-[var(--danger)]">
+            <div className="mt-4 rounded-[var(--radius-md)] bg-[rgba(209,75,90,0.12)] px-4 py-3 text-[13px] text-[var(--danger)]" role="alert">
               {ws.error}
             </div>
           ) : null}

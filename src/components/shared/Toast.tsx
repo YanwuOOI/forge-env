@@ -63,7 +63,7 @@ export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex max-w-[400px] flex-col gap-2">
+    <div className="fixed bottom-4 right-4 z-50 flex max-w-[400px] flex-col gap-2" aria-live="polite" aria-atomic="false">
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onDismiss={onDismiss} />
       ))}
