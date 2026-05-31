@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { HostSummary, JobRecord, RuntimeFamilyState } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass } from '../../lib/constants';
 import { MetricPanel } from '../shared/MetricPanel';
@@ -12,7 +13,7 @@ interface OverviewSectionProps {
   setMirrorPreset: (value: string) => void;
 }
 
-export function OverviewSection({
+export const OverviewSection = memo(function OverviewSection({
   hosts,
   runtimes,
   jobs,
@@ -117,4 +118,4 @@ export function OverviewSection({
       </div>
     </div>
   );
-}
+});

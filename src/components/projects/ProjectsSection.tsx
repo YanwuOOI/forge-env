@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import type { ProjectProfile, ProjectRuntimePolicyOptions, RuntimeFamilyState } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass, buttonDisabledClass } from '../../lib/constants';
 import { ProjectPolicyEditor } from './ProjectPolicyEditor';
@@ -19,7 +19,7 @@ interface ProjectsSectionProps {
   ) => void;
 }
 
-export function ProjectsSection({ runtimes, query, setQuery, projects, onAlign }: ProjectsSectionProps) {
+export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, setQuery, projects, onAlign }: ProjectsSectionProps) {
   const [policyDrafts, setPolicyDrafts] = useState<ProjectPolicyDraftMap>({});
   const runtimeByFamily = new Map(runtimes.map((runtime) => [runtime.family, runtime]));
 
@@ -161,7 +161,7 @@ export function ProjectsSection({ runtimes, query, setQuery, projects, onAlign }
       )}
     </div>
   );
-}
+});
 
 function projectActionLabel(family: string) {
   if (family === '.NET') return 'Write SDK pin';

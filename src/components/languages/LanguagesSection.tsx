@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { RuntimeFamilyState } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass, buttonSecondaryClass, buttonDisabledClass } from '../../lib/constants';
 import { RuntimeHealthBadge } from '../shared/RuntimeHealthBadge';
@@ -9,7 +10,7 @@ interface LanguagesSectionProps {
   onRemove: (family: string, version: string) => void;
 }
 
-export function LanguagesSection({ runtimes, onInstall, onSwitch, onRemove }: LanguagesSectionProps) {
+export const LanguagesSection = memo(function LanguagesSection({ runtimes, onInstall, onSwitch, onRemove }: LanguagesSectionProps) {
   const totalInstalled = runtimes.reduce((sum, r) => sum + r.installed.length, 0);
 
   return (
@@ -142,4 +143,4 @@ export function LanguagesSection({ runtimes, onInstall, onSwitch, onRemove }: La
       )})}
     </div>
   );
-}
+});

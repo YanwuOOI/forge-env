@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { HostDetail, HostSummary } from '../../lib/types';
 import { cardClass, insetClass } from '../../lib/constants';
 import { MetricPanel } from '../shared/MetricPanel';
@@ -10,7 +11,7 @@ interface HostsSectionProps {
   onSelectHost: (hostId: string) => void;
 }
 
-export function HostsSection({ hosts, detail, selectedHostId, onSelectHost }: HostsSectionProps) {
+export const HostsSection = memo(function HostsSection({ hosts, detail, selectedHostId, onSelectHost }: HostsSectionProps) {
   return (
     <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
       <div className="grid gap-4">
@@ -114,4 +115,4 @@ export function HostsSection({ hosts, detail, selectedHostId, onSelectHost }: Ho
       </div>
     </div>
   );
-}
+});

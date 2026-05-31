@@ -1,6 +1,6 @@
 import { isTauri } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api } from '../api';
 import { draftsFromServiceConfigs, draftsFromServiceArtifacts } from '../utils';
 import type {
@@ -154,7 +154,7 @@ export function useWorkspace() {
     setEnvTargetProfile(plan.targetProfile);
   }, [selectedHostId]);
 
-  return {
+  return useMemo(() => ({
     hosts,
     runtimes,
     projects,
@@ -179,5 +179,11 @@ export function useWorkspace() {
     refreshAll,
     selectHost,
     updateEnvPlan,
-  };
+  }), [
+    hosts, runtimes, projects, jobs, hostDetail, selectedHostId,
+    dependencies, services, serviceArtifacts, serviceConfigs,
+    serviceConfigDrafts, serviceRestoreDrafts, envPlan, envTargetProfile,
+    mirrorPreset, loading, error, refreshAll, selectHost, updateEnvPlan,
+    setServiceConfigDrafts, setServiceRestoreDrafts, setEnvTargetProfile, setMirrorPreset,
+  ]);
 }

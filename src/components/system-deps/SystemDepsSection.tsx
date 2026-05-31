@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type {
   JobRecord,
@@ -33,7 +34,7 @@ interface SystemDepsSectionProps {
   onDeleteServiceArtifact: (path: string) => void;
 }
 
-export function SystemDepsSection({
+export const SystemDepsSection = memo(function SystemDepsSection({
   dependencies,
   services,
   serviceArtifacts,
@@ -141,4 +142,4 @@ export function SystemDepsSection({
       </div>
     </div>
   );
-}
+});

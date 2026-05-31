@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type {
   EnvPlan,
@@ -38,7 +39,7 @@ interface SettingsSectionProps {
   onRepairImportAction: (action: ImportAction) => void;
 }
 
-export function SettingsSection({
+export const SettingsSection = memo(function SettingsSection({
   hostDetail,
   envPlan,
   envTargetProfile,
@@ -100,4 +101,4 @@ export function SettingsSection({
       />
     </div>
   );
-}
+});

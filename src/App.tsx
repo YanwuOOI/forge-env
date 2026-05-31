@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffectEvent, useState } from 'react';
+import { lazy, Suspense, useDeferredValue, useEffectEvent, useState } from 'react';
 import { api } from './lib/api';
 import { baseDependencies } from './lib/constants';
 import { defaultSelectedImportActionIds } from './lib/utils';
@@ -19,12 +19,12 @@ import { Sidebar } from './components/layout/Sidebar';
 import { TopBar } from './components/layout/TopBar';
 import { JobQueue } from './components/layout/JobQueue';
 import { RuntimePolicyCard } from './components/layout/RuntimePolicyCard';
-import { OverviewSection } from './components/overview/OverviewSection';
-import { HostsSection } from './components/hosts/HostsSection';
-import { LanguagesSection } from './components/languages/LanguagesSection';
-import { ProjectsSection } from './components/projects/ProjectsSection';
-import { SystemDepsSection } from './components/system-deps/SystemDepsSection';
-import { SettingsSection } from './components/settings/SettingsSection';
+const OverviewSection = lazy(() => import('./components/overview/OverviewSection').then(m => ({ default: m.OverviewSection })));
+const HostsSection = lazy(() => import('./components/hosts/HostsSection').then(m => ({ default: m.HostsSection })));
+const LanguagesSection = lazy(() => import('./components/languages/LanguagesSection').then(m => ({ default: m.LanguagesSection })));
+const ProjectsSection = lazy(() => import('./components/projects/ProjectsSection').then(m => ({ default: m.ProjectsSection })));
+const SystemDepsSection = lazy(() => import('./components/system-deps/SystemDepsSection').then(m => ({ default: m.SystemDepsSection })));
+const SettingsSection = lazy(() => import('./components/settings/SettingsSection').then(m => ({ default: m.SettingsSection })));
 import { ErrorBoundary } from './components/shared/ErrorBoundary';
 import { ConnectionStatus } from './components/shared/ConnectionStatus';
 import { WelcomeWizard } from './components/shared/WelcomeWizard';
@@ -182,6 +182,7 @@ function App() {
             </div>
           ) : (
             <section className="mt-4 flex-1 overflow-auto">
+              <Suspense fallback={<div className="animate-pulse rounded-[var(--radius-md)] bg-[var(--bg-elevated)] p-5 h-32" />}>
               {activeView === 'overview' ? (
                 <ErrorBoundary label="Overview">
                   <OverviewSection
@@ -403,6 +404,7 @@ function App() {
                   />
                 </ErrorBoundary>
               ) : null}
+              </Suspense>
             </section>
           )}
 
