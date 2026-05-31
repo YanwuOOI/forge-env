@@ -1,0 +1,20 @@
+# Code Owners for Forge Env
+# Each line is a file pattern followed by one or more owners.
+
+# Default owner for everything
+* @pano-dev
+
+# Rust backend
+/src-tauri/ @pano-dev
+
+# Frontend
+/src/ @pano-dev
+
+# CI/CD
+/.github/ @pano-dev
+
+# Documentation
+/docs/ @pano-dev
+
+# Design system
+/design-system/ @pano-dev
