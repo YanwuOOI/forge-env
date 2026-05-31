@@ -1,0 +1,159 @@
+{
+  "app": {
+    "name": "Forge Env",
+    "tagline": "运行时的软工业控制室。",
+    "description": "一个 Tauri 壳，管理语言版本、镜像、PATH 策略和项目检测。"
+  },
+  "nav": {
+    "overview": "概览",
+    "overviewEyebrow": "控制中心",
+    "hosts": "主机",
+    "hostsEyebrow": "机器拓扑",
+    "languages": "语言",
+    "languagesEyebrow": "运行时层",
+    "projects": "项目",
+    "projectsEyebrow": "项目检测",
+    "deps": "系统依赖",
+    "depsEyebrow": "基础工具链",
+    "settings": "设置",
+    "settingsEyebrow": "镜像与导出"
+  },
+  "sidebar": {
+    "liveStatus": "实时状态",
+    "busy": "忙碌",
+    "ready": "就绪",
+    "hosts": "主机",
+    "runtimes": "运行时",
+    "noTask": "没有运行中的任务。运行时、镜像和依赖操作需要确认后才会修改主机。"
+  },
+  "topbar": {
+    "activeHost": "当前主机",
+    "noHost": "未加载主机",
+    "refresh": "刷新快照",
+    "description": "当前构建涵盖主机发现、运行时状态、项目检查、镜像预设、系统依赖检查，以及主机感知的导出/导入工作流。"
+  },
+  "overview": {
+    "workspacePulse": "工作区脉搏",
+    "systemLandscape": "系统全景快照",
+    "hostLayers": "{count} 个主机层",
+    "detectedHosts": "检测到的主机",
+    "managedRuntimes": "管理的运行时",
+    "recentJobs": "最近任务",
+    "runtimeFocus": "运行时焦点",
+    "defaultVersions": "每个语言族的默认版本",
+    "notInstalled": "未安装",
+    "mirrorPreset": "镜像预设",
+    "applyDomesticMirrors": "安全应用国内镜像",
+    "preset": "预设",
+    "applyPreset": "应用预设",
+    "architectureNote": "架构说明",
+    "whyCompact": "为什么这个界面保持紧凑"
+  },
+  "hosts": {
+    "hostDetail": "主机详情",
+    "shellMachinePolicy": "Shell 和机器策略面",
+    "noDetail": "未加载主机详情。",
+    "arch": "架构",
+    "shell": "Shell",
+    "pkgMgr": "包管理器",
+    "pathPreview": "PATH 预览",
+    "shellProfiles": "Shell 配置",
+    "packageManagers": "包管理器",
+    "workingContext": "工作上下文"
+  },
+  "languages": {
+    "installedVersions": "已安装版本",
+    "active": "活跃",
+    "activate": "激活",
+    "remove": "移除",
+    "policyHooks": "策略钩子",
+    "noRuntimes": "尚未安装运行时",
+    "noRuntimesHint": "安装您的第一个语言运行时开始使用。Forge Env 支持 Python、Node.js、Rust、Java、Go、.NET、PHP、Ruby 和 C/C++。"
+  },
+  "projects": {
+    "projectDiscovery": "项目发现",
+    "markerDriven": "基于标记的运行时建议",
+    "searchPlaceholder": "按路径、标记或项目名筛选",
+    "suggestedRuntimes": "建议的运行时",
+    "riskFlags": "风险标记",
+    "noRisk": "未在此项目配置中检测到关键偏差。",
+    "noProjects": "未检测到项目",
+    "noProjectsHint": "Forge Env 扫描项目标记如 package.json、pyproject.toml、Cargo.toml 等。",
+    "alignRuntime": "对齐运行时",
+    "writeSdkPin": "写入 SDK 固定",
+    "writeCmakePreset": "写入 CMake 预设"
+  },
+  "deps": {
+    "baseLayer": "基础层",
+    "oneClickTemplate": "一键依赖模板",
+    "installBaseTemplate": "安装基础模板",
+    "serviceMvp": "服务提供商 MVP",
+    "dataStores": "数据存储、队列和边缘代理",
+    "running": "运行中",
+    "tracked": "已追踪",
+    "start": "启动",
+    "stop": "停止",
+    "restart": "重启",
+    "managedConfig": "托管配置",
+    "applyConfig": "应用配置",
+    "resetFields": "重置字段",
+    "snapshotTools": "快照工具",
+    "createBackup": "创建备份",
+    "exportDataDir": "导出数据目录",
+    "logicalBackup": "逻辑备份",
+    "restoreLatest": "恢复最新",
+    "serviceState": "服务状态"
+  },
+  "settings": {
+    "proxyProfile": "安全代理配置",
+    "storeCredentials": "将代理凭据存储在系统保险库中",
+    "enableProxy": "启用托管代理配置",
+    "credentialStore": "凭据存储",
+    "passwordSaved": "密码已保存",
+    "noPassword": "未保存密码",
+    "saveProxy": "保存代理配置",
+    "clearProxy": "清除代理配置",
+    "exportTemplate": "导出模板",
+    "generatePortable": "生成可移植环境包",
+    "generateExport": "生成导出",
+    "envPolicy": "环境策略",
+    "previewShell": "预览 Shell 配置变更",
+    "targetProfile": "目标配置",
+    "refreshPlan": "刷新计划",
+    "applyShellBlock": "应用 Shell 块",
+    "exports": "导出",
+    "pathAdditions": "PATH 增补",
+    "managedBlock": "托管块预览",
+    "importReconstruction": "导入重建",
+    "planRebuild": "从包计划主机感知的重建操作",
+    "pasteBundle": "在此粘贴导出的模板包",
+    "validateImport": "验证导入",
+    "applySelected": "应用选中的操作",
+    "selectAll": "全选计划中的操作",
+    "clearSelection": "清除选择",
+    "selectHost": "选择主机",
+    "clearHost": "清除主机"
+  },
+  "confirm": {
+    "confirm": "确认",
+    "cancel": "取消"
+  },
+  "wizard": {
+    "welcome": "欢迎使用 Forge Env",
+    "welcomeDesc": "一个统一的仪表板，管理所有机器上的语言运行时、镜像、系统依赖和环境配置。",
+    "discover": "发现您的环境",
+    "discoverDesc": "Forge Env 自动检测您的主机（macOS、Linux、Windows、WSL）、已安装的运行时和项目需求。",
+    "allSet": "一切就绪",
+    "allSetDesc": "从概览仪表板开始探索，或跳转到语言管理运行时版本。您可以随时从设置返回此指南。",
+    "getStarted": "开始使用",
+    "next": "下一步",
+    "back": "返回"
+  },
+  "toast": {
+    "dismiss": "关闭"
+  },
+  "connection": {
+    "browserPreview": "浏览器预览模式",
+    "browserPreviewHint": "使用模拟数据运行。部分功能需要 Tauri 桌面应用。"
+  }
+}

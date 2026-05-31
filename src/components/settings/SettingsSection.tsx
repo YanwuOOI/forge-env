@@ -11,6 +11,7 @@ import { ProxyPanel } from './ProxyPanel';
 import { ExportPanel } from './ExportPanel';
 import { EnvPlanPanel } from './EnvPlanPanel';
 import { ImportPanel } from './ImportPanel';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface SettingsSectionProps {
   hostDetail: HostDetail | null;
@@ -64,6 +65,8 @@ export function SettingsSection({
   return (
     <div className="grid gap-4 xl:grid-cols-[1fr_1fr]">
       <div className="grid gap-4">
+        <LanguageSwitcher />
+
         <ProxyPanel
           proxySettings={proxySettings}
           setProxySettings={setProxySettings}

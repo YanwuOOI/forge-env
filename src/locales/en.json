@@ -1,0 +1,160 @@
+{
+  "app": {
+    "name": "Forge Env",
+    "tagline": "Soft industrial control room for runtimes.",
+    "description": "A Tauri shell for language versions, mirrors, PATH policy, and project detection."
+  },
+  "nav": {
+    "overview": "Overview",
+    "overviewEyebrow": "Command center",
+    "hosts": "Hosts",
+    "hostsEyebrow": "Machine topology",
+    "languages": "Languages",
+    "languagesEyebrow": "Runtime layers",
+    "projects": "Projects",
+    "projectsEyebrow": "Project detection",
+    "deps": "System Deps",
+    "depsEyebrow": "Base toolchain",
+    "settings": "Settings",
+    "settingsEyebrow": "Mirrors and export"
+  },
+  "sidebar": {
+    "liveStatus": "Live Status",
+    "busy": "Busy",
+    "ready": "Ready",
+    "hosts": "Hosts",
+    "runtimes": "Runtimes",
+    "noTask": "No running task. Runtime, mirror, and dependency actions require confirmation before they mutate the host."
+  },
+  "topbar": {
+    "activeHost": "Active host",
+    "noHost": "No host loaded",
+    "refresh": "Refresh snapshot",
+    "description": "Current build covers host discovery, runtime state, project inspection, mirror presets, system dependency checks, and host-aware export/import workflows."
+  },
+  "overview": {
+    "workspacePulse": "Workspace pulse",
+    "systemLandscape": "System landscape snapshot",
+    "hostLayers": "{count} host layer",
+    "hostLayers_plural": "{count} host layers",
+    "detectedHosts": "Detected hosts",
+    "managedRuntimes": "Managed runtimes",
+    "recentJobs": "Recent jobs",
+    "runtimeFocus": "Runtime focus",
+    "defaultVersions": "Default versions per language family",
+    "notInstalled": "Not installed",
+    "mirrorPreset": "Mirror preset",
+    "applyDomesticMirrors": "Apply domestic mirrors safely",
+    "preset": "Preset",
+    "applyPreset": "Apply preset",
+    "architectureNote": "Architecture note",
+    "whyCompact": "Why this UI stays compact"
+  },
+  "hosts": {
+    "hostDetail": "Host detail",
+    "shellMachinePolicy": "Shell and machine policy surface",
+    "noDetail": "No host detail loaded.",
+    "arch": "Arch",
+    "shell": "Shell",
+    "pkgMgr": "Pkg mgr",
+    "pathPreview": "PATH preview",
+    "shellProfiles": "Shell profiles",
+    "packageManagers": "Package managers",
+    "workingContext": "Working context"
+  },
+  "languages": {
+    "installedVersions": "Installed versions",
+    "active": "Active",
+    "activate": "Activate",
+    "remove": "Remove",
+    "policyHooks": "Policy hooks",
+    "noRuntimes": "No runtimes installed yet",
+    "noRuntimesHint": "Install your first language runtime to get started. Forge Env supports Python, Node.js, Rust, Java, Go, .NET, PHP, Ruby, and C/C++."
+  },
+  "projects": {
+    "projectDiscovery": "Project discovery",
+    "markerDriven": "Marker-driven runtime suggestions",
+    "searchPlaceholder": "Filter by path, marker, or project name",
+    "suggestedRuntimes": "Suggested runtimes",
+    "riskFlags": "Risk flags",
+    "noRisk": "No critical drift detected in this project profile.",
+    "noProjects": "No projects detected",
+    "noProjectsHint": "Forge Env scans for project markers like package.json, pyproject.toml, Cargo.toml, and more.",
+    "alignRuntime": "Align runtime",
+    "writeSdkPin": "Write SDK pin",
+    "writeCmakePreset": "Write CMake preset"
+  },
+  "deps": {
+    "baseLayer": "Base layer",
+    "oneClickTemplate": "One-click dependency template",
+    "installBaseTemplate": "Install base template",
+    "serviceMvp": "Service provider MVP",
+    "dataStores": "Data stores, queues, and edge proxy",
+    "running": "running",
+    "tracked": "tracked",
+    "start": "Start",
+    "stop": "Stop",
+    "restart": "Restart",
+    "managedConfig": "Managed config",
+    "applyConfig": "Apply config",
+    "resetFields": "Reset fields",
+    "snapshotTools": "Snapshot tools",
+    "createBackup": "Create backup",
+    "exportDataDir": "Export data dir",
+    "logicalBackup": "Logical backup",
+    "restoreLatest": "Restore latest",
+    "serviceState": "Service state"
+  },
+  "settings": {
+    "proxyProfile": "Secure proxy profile",
+    "storeCredentials": "Store proxy credentials in the system vault",
+    "enableProxy": "Enable managed proxy profile",
+    "credentialStore": "Credential store",
+    "passwordSaved": "Password saved",
+    "noPassword": "No password saved",
+    "saveProxy": "Save proxy profile",
+    "clearProxy": "Clear proxy profile",
+    "exportTemplate": "Export template",
+    "generatePortable": "Generate a portable environment bundle",
+    "generateExport": "Generate export",
+    "envPolicy": "Environment policy",
+    "previewShell": "Preview shell profile changes",
+    "targetProfile": "Target profile",
+    "refreshPlan": "Refresh plan",
+    "applyShellBlock": "Apply shell block",
+    "exports": "Exports",
+    "pathAdditions": "PATH additions",
+    "managedBlock": "Managed block preview",
+    "importReconstruction": "Import reconstruction",
+    "planRebuild": "Plan host-aware rebuild actions from a bundle",
+    "pasteBundle": "Paste an exported template bundle here",
+    "validateImport": "Validate import",
+    "applySelected": "Apply selected actions",
+    "selectAll": "Select all planned",
+    "clearSelection": "Clear selection",
+    "selectHost": "Select host",
+    "clearHost": "Clear host"
+  },
+  "confirm": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "wizard": {
+    "welcome": "Welcome to Forge Env",
+    "welcomeDesc": "A unified dashboard for managing language runtimes, mirrors, system dependencies, and environment configuration across all your machines.",
+    "discover": "Discover Your Environment",
+    "discoverDesc": "Forge Env automatically detects your hosts (macOS, Linux, Windows, WSL), installed runtimes, and project requirements.",
+    "allSet": "You're All Set",
+    "allSetDesc": "Start by exploring the Overview dashboard, or jump to Languages to manage your runtime versions. You can always return to this guide from Settings.",
+    "getStarted": "Get started",
+    "next": "Next",
+    "back": "Back"
+  },
+  "toast": {
+    "dismiss": "Dismiss"
+  },
+  "connection": {
+    "browserPreview": "Browser preview mode",
+    "browserPreviewHint": "Running with mock data. Some features require the Tauri desktop app."
+  }
+}
