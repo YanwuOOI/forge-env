@@ -19,11 +19,9 @@ const ToastContext = createContext<ToastContextValue>({
   dismiss: () => {},
 });
 
-let counter = 0;
-
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const counterRef = useRef(counter);
+  const counterRef = useRef(0);
 
   const addToast = useCallback((type: ToastType, message: string): string => {
     counterRef.current += 1;

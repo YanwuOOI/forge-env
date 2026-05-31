@@ -1,7 +1,7 @@
 import { useDeferredValue, useEffectEvent, useState } from 'react';
 import { api } from './lib/api';
 import { baseDependencies } from './lib/constants';
-import { filterJobsForView, defaultSelectedImportActionIds } from './lib/utils';
+import { defaultSelectedImportActionIds } from './lib/utils';
 import { useConfirm } from './lib/hooks/useConfirm';
 import { useTheme } from './lib/hooks/useTheme';
 import { useUpdater } from './lib/hooks/useUpdater';

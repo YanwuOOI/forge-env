@@ -7,7 +7,6 @@ import type {
   ImportResult,
   ProxySettings,
 } from '../../lib/types';
-import { cardClass } from '../../lib/constants';
 import { ProxyPanel } from './ProxyPanel';
 import { ExportPanel } from './ExportPanel';
 import { EnvPlanPanel } from './EnvPlanPanel';

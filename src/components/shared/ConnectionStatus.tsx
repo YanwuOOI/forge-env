@@ -1,7 +1,7 @@
 import { isTauri } from '@tauri-apps/api/core';
 
 interface ConnectionStatusProps {
-  onReconnect?: () => void;
+  onReconnect?: () => void; // Reserved for future use
 }
 
 export function ConnectionStatus({ onReconnect }: ConnectionStatusProps) {

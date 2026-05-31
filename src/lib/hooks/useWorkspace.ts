@@ -60,7 +60,7 @@ export function useWorkspace() {
     setError(null);
 
     try {
-      const [nextHosts, nextProjects, nextJobs, nextPreferences, nextProxySettings] = await Promise.all([
+      const [nextHosts, nextProjects, nextJobs, nextPreferences] = await Promise.all([
         api.hostsList(),
         api.projectsInspect(),
         api.jobsSubscribe(),

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 interface UseRetryOptions {
   maxRetries?: number;
@@ -16,7 +16,6 @@ export function useRetry(options: UseRetryOptions = {}): UseRetryResult {
   const { maxRetries = 2, delayMs = 1000 } = options;
   const [retrying, setRetrying] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const mountedRef = useRef(true);
 
   const execute = useCallback(async (fn: () => Promise<unknown>): Promise<boolean> => {
     setRetrying(true);
@@ -27,7 +26,7 @@ export function useRetry(options: UseRetryOptions = {}): UseRetryResult {
         await fn();
         setRetrying(false);
         return true;
-      } catch (err) {
+      } catch (_err) {
         if (attempt < maxRetries) {
           setRetryCount(attempt + 1);
           await new Promise((resolve) => setTimeout(resolve, delayMs * (attempt + 1)));
