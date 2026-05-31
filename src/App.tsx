@@ -27,6 +27,7 @@ import { SystemDepsSection } from './components/system-deps/SystemDepsSection';
 import { SettingsSection } from './components/settings/SettingsSection';
 import { ErrorBoundary } from './components/shared/ErrorBoundary';
 import { ConnectionStatus } from './components/shared/ConnectionStatus';
+import { WelcomeWizard } from './components/shared/WelcomeWizard';
 
 import { panelClass, cardClass } from './lib/constants';
 
@@ -81,6 +82,10 @@ function App() {
   const [importDraft, setImportDraft] = useState('');
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [selectedImportActionIds, setSelectedImportActionIds] = useState<string[]>([]);
+  const [showWizard, setShowWizard] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return !localStorage.getItem('forge-env-wizard-seen');
+  });
   const [jobFilterMode, setJobFilterMode] = useState<JobFilterMode>('relevant');
 
   const deferredProjectQuery = useDeferredValue(projectQuery);
@@ -106,6 +111,17 @@ function App() {
   const activeHost = ws.hosts.find((host) => host.id === ws.selectedHostId) ?? ws.hosts[0];
   const pendingJobs = ws.jobs.filter((job) => job.status === 'queued' || job.status === 'running');
   const totalInstalledRuntimes = ws.runtimes.reduce((sum, runtime) => sum + runtime.installed.length, 0);
+
+  if (showWizard) {
+    return (
+      <WelcomeWizard
+        onComplete={() => {
+          localStorage.setItem('forge-env-wizard-seen', '1');
+          setShowWizard(false);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-[var(--bg-canvas)] p-4 text-[var(--text-primary)] md:p-6">

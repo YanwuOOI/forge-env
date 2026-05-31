@@ -151,11 +151,12 @@ export function ProjectsSection({ runtimes, query, setQuery, projects, onAlign }
           </div>
         ))
       ) : (
-        <div className={`${cardClass} p-6 text-[13px] leading-6 text-[var(--text-secondary)]`}>
-          No project markers matched the current filter. The Rust backend scans the workspace root and one level of
-          children for `.python-version`, `pyproject.toml`, `requirements.txt`, `.nvmrc`, `package.json`,
-          `Cargo.toml`, `pom.xml`, `build.gradle(.kts)`, `go.mod`, `global.json`, `.csproj`, `.fsproj`, `.sln`,
-          `composer.json`, `Gemfile`, `.ruby-version`, `CMakeLists.txt`, `compile_commands.json`, and `Makefile`.
+        <div className={`${cardClass} p-6 text-center`}>
+          <p className="text-[48px]" role="img" aria-hidden="true">📂</p>
+          <h3 className="mt-3 text-[18px] font-semibold text-[var(--text-primary)]">No projects detected</h3>
+          <p className="mt-2 max-w-lg mx-auto text-[13px] leading-6 text-[var(--text-secondary)]">
+            Forge Env scans for project markers like <code className="font-mono text-[12px]">package.json</code>, <code className="font-mono text-[12px]">pyproject.toml</code>, <code className="font-mono text-[12px]">Cargo.toml</code>, and more. Open a project directory to see suggestions.
+          </p>
         </div>
       )}
     </div>

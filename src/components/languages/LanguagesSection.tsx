@@ -10,8 +10,19 @@ interface LanguagesSectionProps {
 }
 
 export function LanguagesSection({ runtimes, onInstall, onSwitch, onRemove }: LanguagesSectionProps) {
+  const totalInstalled = runtimes.reduce((sum, r) => sum + r.installed.length, 0);
+
   return (
     <div className="grid gap-4">
+      {totalInstalled === 0 ? (
+        <div className={`${cardClass} p-6 text-center`}>
+          <p className="text-[48px]" role="img" aria-hidden="true">📦</p>
+          <h3 className="mt-3 text-[18px] font-semibold text-[var(--text-primary)]">No runtimes installed yet</h3>
+          <p className="mt-2 text-[13px] leading-6 text-[var(--text-secondary)]">
+            Install your first language runtime to get started. Forge Env supports Python, Node.js, Rust, Java, Go, .NET, PHP, Ruby, and C/C++.
+          </p>
+        </div>
+      ) : null}
       {runtimes.map((runtime) => {
         const canInstall = runtime.capabilities.canInstall;
         const canActivate = runtime.capabilities.canActivate;
