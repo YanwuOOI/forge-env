@@ -148,7 +148,7 @@ pub fn apply_preset_for_host(host_id: &str, preset_name: &str) -> Result<Vec<Str
     Ok(changes)
 }
 
-fn preset_by_name(name: &str) -> Option<MirrorPreset> {
+pub fn preset_by_name(name: &str) -> Option<MirrorPreset> {
     match name {
         "Tsinghua" => Some(MirrorPreset {
             npm_registry: "https://registry.npmmirror.com/",
