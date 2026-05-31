@@ -1256,9 +1256,9 @@ fn parse_dotnet_sdks(
 mod tests {
     use super::{
         normalize_go_version, normalize_java_version, normalize_php_version,
-        normalize_ruby_version, parse_dotnet_sdks, parse_phpbrew_versions_output,
-        phpbrew_supports_remove_output, rbenv_supports_install_output,
-        rbenv_supports_uninstall_output,
+        normalize_ruby_version, parse_dotnet_sdks, parse_gvm_versions,
+        parse_phpbrew_versions_output, phpbrew_supports_remove_output,
+        rbenv_supports_install_output, rbenv_supports_uninstall_output,
     };
 
     #[test]
@@ -1348,5 +1348,59 @@ mod tests {
         assert!(!rbenv_supports_uninstall_output(
             "global\ninstall\nlocal\nversions\n"
         ));
+    }
+
+    #[test]
+    fn parse_gvm_versions_basic() {
+        let output = "=> go1.21.0\n   go1.20.5\n=> go1.19.3\n";
+        let installations = parse_gvm_versions(output, &[]);
+        assert_eq!(installations.len(), 3);
+        assert!(installations[0].active);
+        assert_eq!(installations[0].version, "1.21.0");
+        assert!(!installations[1].active);
+        assert!(installations[2].active);
+    }
+
+    #[test]
+    fn parse_gvm_versions_empty() {
+        let installations = parse_gvm_versions("", &[]);
+        assert!(installations.is_empty());
+    }
+
+    #[test]
+    fn parse_gvm_versions_no_active() {
+        let output = "   go1.21.0\n   go1.20.5\n";
+        let installations = parse_gvm_versions(output, &[]);
+        assert_eq!(installations.len(), 2);
+        assert!(!installations[0].active);
+    }
+
+    #[test]
+    fn normalize_java_version_edge_cases() {
+        assert_eq!(normalize_java_version("17"), "17");
+        assert_eq!(normalize_java_version("openjdk version \"17.0.1\""), "17.0.1");
+        assert_eq!(normalize_java_version("javac 17.0.12"), "17.0.12");
+        assert_eq!(normalize_java_version(""), "system");
+    }
+
+    #[test]
+    fn normalize_go_version_edge_cases() {
+        assert_eq!(normalize_go_version("go1.21.0"), "1.21.0");
+        assert_eq!(normalize_go_version("1.20.5"), "system");
+        assert_eq!(normalize_go_version(""), "system");
+    }
+
+    #[test]
+    fn parse_dotnet_sdks_single() {
+        let output = "8.0.100 [/usr/share/dotnet/sdk]\n";
+        let sdks = parse_dotnet_sdks(output, None, &[]);
+        assert_eq!(sdks.len(), 1);
+        assert_eq!(sdks[0].version, "8.0.100");
+    }
+
+    #[test]
+    fn parse_dotnet_sdks_empty() {
+        let sdks = parse_dotnet_sdks("", None, &[]);
+        assert!(sdks.is_empty());
     }
 }

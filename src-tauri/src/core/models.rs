@@ -456,4 +456,199 @@ mod tests {
         let deserialized: ProxySettings = serde_json::from_str(&json).unwrap();
         assert!(deserialized.enabled);
     }
+
+    #[test]
+    fn export_bundle_serde_round_trip() {
+        let bundle = ExportBundle {
+            file_name: "test.json".to_string(),
+            payload: "{}".to_string(),
+        };
+        let json = serde_json::to_string(&bundle).unwrap();
+        assert!(json.contains("\"fileName\""));
+        let deserialized: ExportBundle = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.file_name, "test.json");
+    }
+
+    #[test]
+    fn import_result_serde_round_trip() {
+        let result = ImportResult {
+            accepted: true,
+            ready_to_apply: false,
+            runtime_count: 2,
+            host_count: 1,
+            planned_count: 3,
+            applied_count: 1,
+            issues: vec!["test issue".to_string()],
+            actions: vec![],
+        };
+        let json = serde_json::to_string(&result).unwrap();
+        assert!(json.contains("\"runtimeCount\""));
+        assert!(json.contains("\"readyToApply\""));
+        let deserialized: ImportResult = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.runtime_count, 2);
+        assert_eq!(deserialized.issues.len(), 1);
+    }
+
+    #[test]
+    fn import_action_serde_round_trip() {
+        let action = ImportAction {
+            id: "a1".to_string(),
+            host_id: "h1".to_string(),
+            host_label: "macOS".to_string(),
+            kind: "install-runtime".to_string(),
+            family: Some("Python".to_string()),
+            status: "planned".to_string(),
+            selected: true,
+            label: "Install Python 3.12".to_string(),
+            reason: None,
+            outcome_title: None,
+            next_step: None,
+            remediation: None,
+            repair_available: false,
+        };
+        let json = serde_json::to_string(&action).unwrap();
+        assert!(json.contains("\"hostId\""));
+        assert!(json.contains("\"repairAvailable\""));
+        let deserialized: ImportAction = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.family.as_deref(), Some("Python"));
+    }
+
+    #[test]
+    fn app_preferences_serde_round_trip() {
+        let prefs = AppPreferences {
+            applied_mirror_preset: Some("Tsinghua".to_string()),
+            selected_host_id: Some("native".to_string()),
+            last_env_target_profile: Some("~/.zshrc".to_string()),
+        };
+        let json = serde_json::to_string(&prefs).unwrap();
+        assert!(json.contains("\"appliedMirrorPreset\""));
+        let deserialized: AppPreferences = serde_json::from_str(&json).unwrap();
+        assert_eq!(
+            deserialized.applied_mirror_preset.as_deref(),
+            Some("Tsinghua")
+        );
+    }
+
+    #[test]
+    fn app_preferences_partial_json() {
+        let json = r#"{}"#;
+        let prefs: AppPreferences = serde_json::from_str(json).unwrap();
+        assert!(prefs.applied_mirror_preset.is_none());
+        assert!(prefs.selected_host_id.is_none());
+    }
+
+    #[test]
+    fn env_plan_serde_round_trip() {
+        let plan = EnvPlan {
+            target_profile: "~/.zshrc".to_string(),
+            available_profiles: vec![],
+            path_entries: vec!["/opt/homebrew/bin".to_string()],
+            variables: vec![EnvVariableSuggestion {
+                key: "PYENV_ROOT".to_string(),
+                value: "$HOME/.pyenv".to_string(),
+                reason: "pyenv root".to_string(),
+            }],
+            managed_block: "# >>> forge-env >>>\n# <<< forge-env <<<".to_string(),
+            notes: vec!["test".to_string()],
+        };
+        let json = serde_json::to_string(&plan).unwrap();
+        assert!(json.contains("\"targetProfile\""));
+        assert!(json.contains("\"managedBlock\""));
+        let deserialized: EnvPlan = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.path_entries.len(), 1);
+        assert_eq!(deserialized.variables.len(), 1);
+    }
+
+    #[test]
+    fn service_config_state_serde_round_trip() {
+        let config = ServiceConfigState {
+            service_name: "Redis".to_string(),
+            config_path: Some("/etc/redis.conf".to_string()),
+            port: Some(6379),
+            data_dir: Some("/var/lib/redis".to_string()),
+            can_edit_port: true,
+            can_edit_data_dir: false,
+            notes: vec!["test".to_string()],
+        };
+        let json = serde_json::to_string(&config).unwrap();
+        assert!(json.contains("\"serviceName\""));
+        assert!(json.contains("\"canEditPort\""));
+        let deserialized: ServiceConfigState = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.port, Some(6379));
+    }
+
+    #[test]
+    fn service_artifact_serde_round_trip() {
+        let artifact = ServiceArtifact {
+            service_name: "Redis".to_string(),
+            kind: "backup".to_string(),
+            path: "/tmp/redis.tar.gz".to_string(),
+            size_bytes: Some(1024),
+            created_at: Some("12345".to_string()),
+            managed: true,
+        };
+        let json = serde_json::to_string(&artifact).unwrap();
+        assert!(json.contains("\"sizeBytes\""));
+        let deserialized: ServiceArtifact = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.size_bytes, Some(1024));
+    }
+
+    #[test]
+    fn system_dependency_state_serde_round_trip() {
+        let dep = SystemDependencyState {
+            name: "Git".to_string(),
+            command: "git --version".to_string(),
+            installed: true,
+            version: Some("2.42.0".to_string()),
+            source_hint: "Homebrew".to_string(),
+        };
+        let json = serde_json::to_string(&dep).unwrap();
+        assert!(json.contains("\"sourceHint\""));
+        let deserialized: SystemDependencyState = serde_json::from_str(&json).unwrap();
+        assert!(deserialized.installed);
+    }
+
+    #[test]
+    fn runtime_installation_serde_round_trip() {
+        let inst = RuntimeInstallation {
+            version: "3.12.4".to_string(),
+            channel: "stable".to_string(),
+            active: true,
+            source: "pyenv".to_string(),
+            tools: vec!["pip".to_string()],
+        };
+        let json = serde_json::to_string(&inst).unwrap();
+        let deserialized: RuntimeInstallation = serde_json::from_str(&json).unwrap();
+        assert!(deserialized.active);
+        assert_eq!(deserialized.tools.len(), 1);
+    }
+
+    #[test]
+    fn host_detail_serde_round_trip() {
+        let detail = HostDetail {
+            summary: HostSummary {
+                id: "test".to_string(),
+                label: "Test".to_string(),
+                kind: "macos".to_string(),
+                architecture: "arm64".to_string(),
+                shell: "zsh".to_string(),
+                status: "ready".to_string(),
+                recommended_package_manager: "Homebrew".to_string(),
+                path_preview: vec![],
+            },
+            os_version: "macOS 14.0".to_string(),
+            cwd: "/Users/test".to_string(),
+            home_dir: "/Users/test".to_string(),
+            path_entries_count: 5,
+            shell_profiles: vec!["~/.zshrc".to_string()],
+            package_managers: vec!["Homebrew".to_string()],
+            mirrors_supported: vec!["npm".to_string()],
+            notes: vec![],
+        };
+        let json = serde_json::to_string(&detail).unwrap();
+        assert!(json.contains("\"osVersion\""));
+        assert!(json.contains("\"shellProfiles\""));
+        let deserialized: HostDetail = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.summary.id, "test");
+    }
 }

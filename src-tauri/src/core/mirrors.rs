@@ -242,7 +242,9 @@ fn replace_managed_block(existing: &str, managed_block: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{replace_managed_block, CARGO_BEGIN};
+    use super::{
+        replace_managed_block, CARGO_BEGIN, MirrorError, MirrorErrorKind, preset_by_name,
+    };
 
     #[test]
     fn replaces_existing_managed_block() {
@@ -256,5 +258,45 @@ mod tests {
         assert!(after.contains("new block"));
         assert!(!after.contains("old block"));
         assert!(after.contains("target-dir"));
+    }
+
+    #[test]
+    fn preset_by_name_finds_known_presets() {
+        assert!(preset_by_name("Tsinghua").is_some());
+        assert!(preset_by_name("Aliyun").is_some());
+        assert!(preset_by_name("Huawei Cloud").is_some());
+        assert!(preset_by_name("Company Proxy").is_some());
+        assert!(preset_by_name("nonexistent").is_none());
+    }
+
+    #[test]
+    fn preset_by_name_tsinghua_has_npm() {
+        let preset = preset_by_name("Tsinghua").unwrap();
+        assert!(!preset.npm_registry.is_empty());
+        assert!(!preset.pip_index_url.is_empty());
+        assert!(!preset.cargo_sparse_registry.is_empty());
+    }
+
+    #[test]
+    fn replace_managed_block_empty_file() {
+        let block = "# >>> forge-env >>>\ndata\n# <<< forge-env <<<";
+        let result = replace_managed_block("", block);
+        assert!(result.contains("# >>> forge-env >>>"));
+        assert!(result.contains("data"));
+    }
+
+    #[test]
+    fn replace_managed_block_appends_to_existing() {
+        let content = "existing_line\nanother_line";
+        let block = "# >>> forge-env >>>\nnew\n# <<< forge-env <<<";
+        let result = replace_managed_block(content, block);
+        assert!(result.contains("existing_line"));
+        assert!(result.contains("new"));
+    }
+
+    #[test]
+    fn mirror_error_classify() {
+        let err = MirrorError::new(MirrorErrorKind::PermissionDenied, "test");
+        assert_eq!(err.outcome_title(), "Permission denied");
     }
 }

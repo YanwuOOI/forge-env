@@ -1833,7 +1833,11 @@ fn unsupported_direct_action(name: &str, action: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{parse_service_artifact_line, slug_service_name};
+    use super::{
+        action_label, action_name, first_line, parse_service_artifact_line,
+        replace_managed_block, shell_quote, slug_service_name, supported_snapshot_services,
+        ServiceAction,
+    };
 
     #[test]
     fn parses_service_artifact_line() {
@@ -1855,5 +1859,112 @@ mod tests {
     fn slugs_service_name() {
         assert_eq!(slug_service_name("PostgreSQL"), "postgresql");
         assert_eq!(slug_service_name("C/C++"), "c-c");
+    }
+
+    #[test]
+    fn slug_service_name_edge_cases() {
+        assert_eq!(slug_service_name(""), "");
+        assert_eq!(slug_service_name("Redis"), "redis");
+        assert_eq!(slug_service_name("C/C++"), "c-c");
+        assert_eq!(slug_service_name("RabbitMQ"), "rabbitmq");
+        assert_eq!(slug_service_name("  MongoDB  "), "mongodb");
+        assert_eq!(slug_service_name("my-service"), "my-service");
+        assert_eq!(
+            slug_service_name("Service With Spaces"),
+            "service-with-spaces"
+        );
+    }
+
+    #[test]
+    fn shell_quote_escapes_single_quotes() {
+        assert_eq!(shell_quote("hello"), "hello");
+        assert_eq!(shell_quote("it's"), "it'\"'\"'s");
+        assert_eq!(shell_quote("a''b"), "a'\"'\"''\"'\"'b");
+    }
+
+    #[test]
+    fn first_line_extracts_first_non_empty() {
+        assert_eq!(first_line(None), None);
+        assert_eq!(first_line(Some("".to_string())), None);
+        assert_eq!(
+            first_line(Some("  \nsecond".to_string())),
+            None,
+            "first line is whitespace-only so it is filtered"
+        );
+        assert_eq!(
+            first_line(Some("first\nsecond".to_string())),
+            Some("first".to_string())
+        );
+        assert_eq!(
+            first_line(Some("  trimmed  ".to_string())),
+            Some("trimmed".to_string())
+        );
+    }
+
+    #[test]
+    fn action_name_and_label() {
+        assert_eq!(action_name(ServiceAction::Start), "start");
+        assert_eq!(action_name(ServiceAction::Stop), "stop");
+        assert_eq!(action_name(ServiceAction::Restart), "restart");
+        assert_eq!(action_label(ServiceAction::Start), "Started");
+        assert_eq!(action_label(ServiceAction::Stop), "Stopped");
+        assert_eq!(action_label(ServiceAction::Restart), "Restarted");
+    }
+
+    #[test]
+    fn ensure_snapshot_capable_service_valid() {
+        let supported = supported_snapshot_services();
+        assert!(supported.contains(&"Redis"));
+        assert!(supported.contains(&"PostgreSQL"));
+        assert!(supported.contains(&"MySQL"));
+        assert_eq!(supported.len(), 3);
+    }
+
+    #[test]
+    fn parse_service_artifact_line_edge_cases() {
+        // Empty line returns None (empty path)
+        assert!(parse_service_artifact_line("Redis", "backup", "").is_none());
+        // Missing fields — only path, no timestamp or size
+        let artifact = parse_service_artifact_line("Redis", "backup", "incomplete")
+            .expect("still returns an artifact with just a path");
+        assert_eq!(artifact.path, "incomplete");
+        assert!(artifact.created_at.is_none());
+        assert!(artifact.size_bytes.is_none());
+        // Empty path after pipe
+        assert!(parse_service_artifact_line("Redis", "backup", "|12345|1024").is_none());
+        // Zero size
+        let artifact = parse_service_artifact_line("Redis", "backup", "/tmp/test.tar.gz|12345|0")
+            .expect("ok");
+        assert_eq!(artifact.size_bytes, Some(0));
+    }
+
+    #[test]
+    fn replace_managed_block_inserts_new_block() {
+        let content = "existing config line\n";
+        let block = "# >>> forge-env service >>>\ndata = true\n# <<< forge-env service <<<";
+        let result = replace_managed_block(content, block);
+        assert!(result.contains("# >>> forge-env service >>>"));
+        assert!(result.contains("existing config line"));
+    }
+
+    #[test]
+    fn replace_managed_block_replaces_existing() {
+        let content =
+            "line1\n# >>> forge-env service >>>\nold data\n# <<< forge-env service <<<\nline2";
+        let block = "# >>> forge-env service >>>\nnew data\n# <<< forge-env service <<<";
+        let result = replace_managed_block(content, block);
+        assert!(result.contains("new data"));
+        assert!(!result.contains("old data"));
+        assert!(result.contains("line1"));
+        assert!(result.contains("line2"));
+    }
+
+    #[test]
+    fn replace_managed_block_empty_content() {
+        let content = "";
+        let block = "# >>> forge-env service >>>\ndata\n# <<< forge-env service <<<";
+        let result = replace_managed_block(content, block);
+        assert!(result.contains("# >>> forge-env service >>>"));
+        assert!(result.contains("data"));
     }
 }
