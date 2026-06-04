@@ -136,6 +136,7 @@
     "exports": "导出",
     "pathAdditions": "PATH 增补",
     "managedBlock": "托管块预览",
+    "exportDescription": "运行时家族、镜像预设和每主机快照被序列化为版本化的 JSON 负载。",
     "importReconstruction": "导入重建",
     "planRebuild": "从包计划主机感知的重建操作",
     "pasteBundle": "在此粘贴导出的模板包",
@@ -144,7 +145,10 @@
     "selectAll": "全选计划中的操作",
     "clearSelection": "清除选择",
     "selectHost": "选择主机",
-    "clearHost": "清除主机"
+    "clearHost": "清除主机",
+    "validateImport": "验证导入",
+    "bundleAccepted": "包已接受",
+    "bundleRejected": "包已拒绝"
   },
   "confirm": {
     "confirm": "确认",
@@ -261,6 +265,17 @@
     "updateAvailable": "可用更新：v{version}",
     "downloading": "下载中...",
     "installAndRestart": "安装并重启"
+  },
+  "wizard": {
+    "welcome": "欢迎使用 Forge Env",
+    "welcomeDesc": "一个统一的仪表板，管理所有机器上的语言运行时、镜像、系统依赖和环境配置。",
+    "discover": "发现您的环境",
+    "discoverDesc": "Forge Env 自动检测您的主机（macOS、Linux、Windows、WSL）、已安装的运行时和项目需求。",
+    "allSet": "一切就绪",
+    "allSetDesc": "从概览仪表板开始探索，或跳转到语言管理运行时版本。您可以随时从设置返回此指南。",
+    "getStarted": "开始使用",
+    "next": "下一步",
+    "back": "返回"
   },
   "connection": {
     "browserPreview": "浏览器预览模式",

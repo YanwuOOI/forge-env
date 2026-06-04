@@ -1,5 +1,6 @@
 import type { EnvPlan, HostDetail } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass, buttonSecondaryClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 
 interface EnvPlanPanelProps {
   hostDetail: HostDetail | null;
@@ -18,17 +19,19 @@ export function EnvPlanPanel({
   onRefreshEnvPlan,
   onApplyEnvPlan,
 }: EnvPlanPanelProps) {
+  const { t } = useI18n();
+
   return (
     <div className={`${cardClass} p-5`}>
-      <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Environment policy</p>
-      <h3 className="mt-2 text-[18px] font-semibold">Preview shell profile changes</h3>
+      <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('settings.envPolicy')}</p>
+      <h3 className="mt-2 text-[18px] font-semibold">{t('settings.previewShell')}</h3>
       {envPlan ? (
         <div className="mt-5 space-y-3">
           <div className={`${insetClass} p-4`}>
             <div className="flex items-center justify-between gap-3">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Target profile</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.targetProfile')}</p>
               <button type="button" className={buttonSecondaryClass} onClick={onRefreshEnvPlan}>
-                Refresh plan
+                {t('settings.refreshPlan')}
               </button>
             </div>
             <select
@@ -44,12 +47,12 @@ export function EnvPlanPanel({
               ))}
             </select>
             <button type="button" className={`${buttonPrimaryClass} mt-4 w-full`} onClick={onApplyEnvPlan}>
-              Apply shell block
+              {t('settings.applyShellBlock')}
             </button>
           </div>
 
           <div className={`${insetClass} p-4`}>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Exports</p>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.exports')}</p>
             <div className="mt-3 space-y-3">
               {envPlan.variables.map((variable) => (
                 <div key={variable.key} className="rounded-[var(--radius-md)] bg-[var(--bg-elevated)] p-3 shadow-[var(--shadow-raised-sm)]">
@@ -68,7 +71,7 @@ export function EnvPlanPanel({
           </div>
 
           <div className={`${insetClass} p-4`}>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">PATH additions</p>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.pathAdditions')}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {envPlan.pathEntries.map((entry) => (
                 <span key={entry} className="rounded-[var(--radius-pill)] bg-[var(--bg-elevated)] px-3 py-1 font-mono text-[11px] text-[var(--text-secondary)] shadow-[var(--shadow-raised-sm)]">
@@ -82,7 +85,7 @@ export function EnvPlanPanel({
           </div>
 
           <div className={`${insetClass} p-4`}>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Managed block preview</p>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.managedBlock')}</p>
             <textarea
               readOnly
               value={envPlan.managedBlock}
@@ -109,7 +112,7 @@ export function EnvPlanPanel({
           ) : null}
         </div>
       ) : (
-        <p className="mt-4 text-[13px] leading-6 text-[var(--text-secondary)]">Environment plan unavailable.</p>
+        <p className="mt-4 text-[13px] leading-6 text-[var(--text-secondary)]">{t('settings.envPlanUnavailable')}</p>
       )}
     </div>
   );

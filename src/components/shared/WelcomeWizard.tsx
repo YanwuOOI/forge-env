@@ -1,30 +1,33 @@
 import { useState } from 'react';
 import { buttonPrimaryClass, buttonSecondaryClass, cardClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 
 interface WelcomeWizardProps {
   onComplete: () => void;
 }
 
-const STEPS = [
-  {
-    title: 'Welcome to Forge Env',
-    description: 'A unified dashboard for managing language runtimes, mirrors, system dependencies, and environment configuration across all your machines.',
-    icon: '🔧',
-  },
-  {
-    title: 'Discover Your Environment',
-    description: 'Forge Env automatically detects your hosts (macOS, Linux, Windows, WSL), installed runtimes, and project requirements.',
-    icon: '🔍',
-  },
-  {
-    title: 'You\'re All Set',
-    description: 'Start by exploring the Overview dashboard, or jump to Languages to manage your runtime versions. You can always return to this guide from Settings.',
-    icon: '🚀',
-  },
-];
-
 export function WelcomeWizard({ onComplete }: WelcomeWizardProps) {
+  const { t } = useI18n();
   const [step, setStep] = useState(0);
+
+  const STEPS = [
+    {
+      title: t('wizard.welcome'),
+      description: t('wizard.welcomeDesc'),
+      icon: '🔧',
+    },
+    {
+      title: t('wizard.discover'),
+      description: t('wizard.discoverDesc'),
+      icon: '🔍',
+    },
+    {
+      title: t('wizard.allSet'),
+      description: t('wizard.allSetDesc'),
+      icon: '🚀',
+    },
+  ];
+
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;
 
@@ -56,7 +59,7 @@ export function WelcomeWizard({ onComplete }: WelcomeWizardProps) {
                 className={buttonSecondaryClass}
                 onClick={() => setStep(step - 1)}
               >
-                Back
+                {t('wizard.back')}
               </button>
             ) : null}
             <button
@@ -70,7 +73,7 @@ export function WelcomeWizard({ onComplete }: WelcomeWizardProps) {
                 }
               }}
             >
-              {isLast ? 'Get started' : 'Next'}
+              {isLast ? t('wizard.getStarted') : t('wizard.next')}
             </button>
           </div>
         </div>

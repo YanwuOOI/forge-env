@@ -13,15 +13,13 @@ export function LanguageSwitcher() {
   return (
     <div className={`${cardClass} p-5`}>
       <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
-        {t('settings.envPolicy') !== 'settings.envPolicy' ? 'Language / 语言' : 'Language'}
+        {t('settings.language')}
       </p>
       <h3 className="mt-2 text-[18px] font-semibold text-[var(--text-primary)]">
-        {locale === 'zh-CN' ? '选择界面语言' : 'Choose interface language'}
+        {t('settings.chooseLanguage')}
       </h3>
       <p className="mt-3 text-[13px] leading-6 text-[var(--text-secondary)]">
-        {locale === 'zh-CN'
-          ? '更改界面语言后立即生效，偏好设置保存在本地存储中。'
-          : 'Language changes take effect immediately. Preference is stored in localStorage.'}
+        {t('settings.languageDescription')}
       </p>
       <div className="mt-5 grid gap-3 md:grid-cols-2">
         {LANGUAGES.map((lang) => (
@@ -41,7 +39,7 @@ export function LanguageSwitcher() {
             </div>
             {locale === lang.value ? (
               <span className="rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--accent-primary)]">
-                Active
+                {t('settings.languageActive')}
               </span>
             ) : null}
           </button>

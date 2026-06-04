@@ -1,5 +1,6 @@
 import type { ExportBundle } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 
 interface ExportPanelProps {
   exportBundle: ExportBundle | null;
@@ -7,15 +8,17 @@ interface ExportPanelProps {
 }
 
 export function ExportPanel({ exportBundle, onExport }: ExportPanelProps) {
+  const { t } = useI18n();
+
   return (
     <div className={`${cardClass} p-5`}>
-      <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Export template</p>
-      <h3 className="mt-2 text-[18px] font-semibold">Generate a portable environment bundle</h3>
+      <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('settings.exportTemplate')}</p>
+      <h3 className="mt-2 text-[18px] font-semibold">{t('settings.generatePortable')}</h3>
       <p className="mt-3 text-[13px] leading-6 text-[var(--text-secondary)]">
-        Runtime families, mirror presets, and per-host snapshots are serialized into a versioned JSON payload.
+        {t('settings.exportDescription')}
       </p>
       <button type="button" className={`${buttonPrimaryClass} mt-5`} onClick={onExport}>
-        Generate export
+        {t('settings.generateExport')}
       </button>
 
       {exportBundle ? (

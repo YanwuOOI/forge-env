@@ -137,6 +137,7 @@
     "exports": "Exports",
     "pathAdditions": "PATH additions",
     "managedBlock": "Managed block preview",
+    "exportDescription": "Runtime families, mirror presets, and per-host snapshots are serialized into a versioned JSON payload.",
     "importReconstruction": "Import reconstruction",
     "planRebuild": "Plan host-aware rebuild actions from a bundle",
     "pasteBundle": "Paste an exported template bundle here",
@@ -145,7 +146,10 @@
     "selectAll": "Select all planned",
     "clearSelection": "Clear selection",
     "selectHost": "Select host",
-    "clearHost": "Clear host"
+    "clearHost": "Clear host",
+    "validateImport": "Validate import",
+    "bundleAccepted": "Bundle accepted",
+    "bundleRejected": "Bundle rejected"
   },
   "confirm": {
     "confirm": "Confirm",
@@ -262,6 +266,17 @@
     "updateAvailable": "Update available: v{version}",
     "downloading": "Downloading...",
     "installAndRestart": "Install & restart"
+  },
+  "wizard": {
+    "welcome": "Welcome to Forge Env",
+    "welcomeDesc": "A unified dashboard for managing language runtimes, mirrors, system dependencies, and environment configuration across all your machines.",
+    "discover": "Discover Your Environment",
+    "discoverDesc": "Forge Env automatically detects your hosts (macOS, Linux, Windows, WSL), installed runtimes, and project requirements.",
+    "allSet": "You're All Set",
+    "allSetDesc": "Start by exploring the Overview dashboard, or jump to Languages to manage your runtime versions. You can always return to this guide from Settings.",
+    "getStarted": "Get started",
+    "next": "Next",
+    "back": "Back"
   },
   "connection": {
     "browserPreview": "Browser preview mode",
