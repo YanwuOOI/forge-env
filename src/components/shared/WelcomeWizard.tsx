@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { buttonPrimaryClass, buttonSecondaryClass, insetClass, cardClass } from '../../lib/constants';
+import { buttonPrimaryClass, buttonSecondaryClass, cardClass } from '../../lib/constants';
 
 interface WelcomeWizardProps {
   onComplete: () => void;

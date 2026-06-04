@@ -1,11 +1,8 @@
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
-use std::sync::Arc;
-
 use serde::{Deserialize, Serialize};
 
-use super::models::{RuntimeCapabilities, RuntimeFamilyState, RuntimeInstallation};
-use super::provider::RuntimeProvider;
+use super::models::{RuntimeCapabilities, RuntimeFamilyState};
 
 /// Plugin manifest format (plugin.json)
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -21,7 +21,7 @@ pub fn run() {
             let menu = MenuBuilder::new(app).items(&[&show, &quit]).build()?;
 
             // Build tray icon
-            let _tray = TrayIconBuilder::new()
+            let mut tray = TrayIconBuilder::new()
                 .menu(&menu)
                 .tooltip("Forge Env — Development Environment Manager")
                 .on_menu_event(move |app, event| {
@@ -51,9 +51,11 @@ pub fn run() {
                             let _ = window.set_focus();
                         }
                     }
-                })
-                .icon(app.default_window_icon().unwrap().clone())
-                .build(app)?;
+                });
+            if let Some(icon) = app.default_window_icon().cloned() {
+                tray = tray.icon(icon);
+            }
+            let _tray = tray.build(app)?;
 
             Ok(())
         })

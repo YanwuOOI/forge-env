@@ -7,29 +7,29 @@ Forge Env CLI 是一个独立的命令行工具，与 GUI 共享 Rust 核心逻�
 ```bash
 # 从源码构建
 cd src-tauri
-cargo build --release --bin forge-env
+cargo build --release --bin forge-env-cli
 
 # 安装到 PATH
-cp target/release/forge-env /usr/local/bin/
+cp target/release/forge-env-cli /usr/local/bin/
 ```
 
 ## 命令总览
 
 | 命令 | 说明 |
 |---|---|
-| `forge-env status` | 显示主机和运行时状态 |
-| `forge-env doctor` | 运行环境健康检查 |
-| `forge-env projects` | 检测项目并建议运行时 |
-| `forge-env mirror` | 应用镜像预设 |
-| `forge-env export` | 导出环境模板 |
-| `forge-env import` | 导入环境模板 |
+| `forge-env-cli status` | 显示主机和运行时状态 |
+| `forge-env-cli doctor` | 运行环境健康检查 |
+| `forge-env-cli projects` | 检测项目并建议运行时 |
+| `forge-env-cli mirror` | 应用镜像预设 |
+| `forge-env-cli export` | 导出环境模板 |
+| `forge-env-cli import` | 导入环境模板 |
 
 ## 命令详解
 
 ### status — 显示状态
 
 ```bash
-forge-env status [--host <HOST_ID>]
+forge-env-cli status [--host <HOST_ID>]
 ```
 
 **输出示例：**
@@ -56,7 +56,7 @@ Mirror preset:
 ### doctor — 健康检查
 
 ```bash
-forge-env doctor [--host <HOST_ID>]
+forge-env-cli doctor [--host <HOST_ID>]
 ```
 
 **输出示例：**
@@ -81,7 +81,7 @@ forge-env doctor [--host <HOST_ID>]
 ### projects — 项目检测
 
 ```bash
-forge-env projects
+forge-env-cli projects
 ```
 
 扫描当前目录和一级子目录，检测项目标记文件并建议运行时。
@@ -94,7 +94,7 @@ forge-env projects
 ### mirror — 镜像配置
 
 ```bash
-forge-env mirror --preset <NAME> [--host <HOST_ID>]
+forge-env-cli mirror --preset <NAME> [--host <HOST_ID>]
 ```
 
 **可用预设：**
@@ -105,8 +105,8 @@ forge-env mirror --preset <NAME> [--host <HOST_ID>]
 
 **示例：**
 ```bash
-forge-env mirror --preset Tsinghua
-forge-env mirror --preset Aliyun --host wsl:ubuntu
+forge-env-cli mirror --preset Tsinghua
+forge-env-cli mirror --preset Aliyun --host wsl:ubuntu
 ```
 
 ---
@@ -114,16 +114,16 @@ forge-env mirror --preset Aliyun --host wsl:ubuntu
 ### export — 导出模板
 
 ```bash
-forge-env export [--host <HOST_ID>] [--output <FILE>]
+forge-env-cli export [--host <HOST_ID>] [--output <FILE>]
 ```
 
 **示例：**
 ```bash
 # 输出到 stdout
-forge-env export
+forge-env-cli export
 
 # 输出到文件
-forge-env export --output ~/forge-env-bundle.json
+forge-env-cli export --output ~/forge-env-bundle.json
 ```
 
 **输出格式：** JSON（schema version 2）
@@ -133,9 +133,9 @@ forge-env export --output ~/forge-env-bundle.json
 ### import — 导入模板
 
 ```bash
-forge-env import <FILE>
+forge-env-cli import <FILE>
 # 或从 stdin
-cat bundle.json | forge-env import -
+cat bundle.json | forge-env-cli import -
 ```
 
 验证导入包并显示可用操作。完整导入需要通过 GUI 执行。

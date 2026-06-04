@@ -7,16 +7,16 @@
 
 | 命令 | 首次运行 | 热运行 | 说明 |
 |---|---|---|---|
-| `forge-env status` | 759ms | 89ms | 读取 SQLite + 扫描 9 个运行时 |
-| `forge-env doctor` | 89ms | 89ms | 检测运行时状态 |
-| `forge-env projects` | 8ms | 8ms | 目录扫描 |
-| `forge-env export` | 4ms | 4ms | JSON 序列化 |
+| `forge-env-cli status` | 759ms | 89ms | 读取 SQLite + 扫描 9 个运行时 |
+| `forge-env-cli doctor` | 89ms | 89ms | 检测运行时状态 |
+| `forge-env-cli projects` | 8ms | 8ms | 目录扫描 |
+| `forge-env-cli export` | 4ms | 4ms | JSON 序列化 |
 
 ## 二进制大小
 
 | 产物 | 大小 |
 |---|---|
-| CLI binary (`forge-env`) | 3.1 MB |
+| CLI binary (`forge-env-cli`) | 3.1 MB |
 | Tauri app bundle | ~15 MB (估算) |
 
 ## 性能特征

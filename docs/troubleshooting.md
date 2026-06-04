@@ -24,7 +24,7 @@
 3. 运行时安装在其他 Host（如 WSL）
 
 **解决方法：**
-1. 运行 `forge-env doctor` 检查 PATH
+1. 运行 `forge-env-cli doctor` 检查 PATH
 2. 确认运行时二进制文件在 PATH 中：`which python3` / `which node`
 3. 如果在 WSL 中安装，切换到对应的 WSL Host
 
@@ -35,7 +35,7 @@
 **症状：** 应用镜像预设后，npm/pip 仍然使用默认源。
 
 **排查步骤：**
-1. 确认预设已应用：`forge-env status` 查看 Mirror preset
+1. 确认预设已应用：`forge-env-cli status` 查看 Mirror preset
 2. 重新打开终端（shell 需要重新加载配置）
 3. 手动验证：
    ```bash
@@ -86,7 +86,7 @@ sudo dnf install libappindicator-gtk3-devel
 3. 包内无匹配当前主机的操作
 
 **解决方法：**
-1. 使用 `forge-env import file.json` 验证包格式
+1. 使用 `forge-env-cli import file.json` 验证包格式
 2. 确认包是通过 Forge Env 导出的（schema version 2）
 3. 检查包中的主机 ID 是否与当前环境匹配
 
@@ -94,12 +94,12 @@ sudo dnf install libappindicator-gtk3-devel
 
 ### CLI 命令找不到
 
-**症状：** 运行 `forge-env` 时提示"command not found"。
+**症状：** 运行 `forge-env-cli` 时提示"command not found"。
 
 **解决方法：**
-1. 确认已安装到 PATH：`which forge-env`
-2. 如果未安装：`cp target/release/forge-env /usr/local/bin/`
-3. 或使用完整路径：`./target/release/forge-env status`
+1. 确认已安装到 PATH：`which forge-env-cli`
+2. 如果未安装：`cp target/release/forge-env-cli /usr/local/bin/`
+3. 或使用完整路径：`./target/release/forge-env-cli status`
 
 ---
 
@@ -117,5 +117,5 @@ sudo dnf install libappindicator-gtk3-devel
 ## 获取帮助
 
 - **GitHub Issues**: https://github.com/pano-dev/forge-env/issues
-- **CLI 帮助**: `forge-env --help` 或 `forge-env <command> --help`
+- **CLI 帮助**: `forge-env-cli --help` 或 `forge-env-cli <command> --help`
 - **日志文件**: `~/.forge-env/logs/`

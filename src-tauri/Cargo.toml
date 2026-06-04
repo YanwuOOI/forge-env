@@ -3,6 +3,7 @@ name = "forge-env"
 version = "0.1.0"
 description = "A cross-platform development environment manager shell"
 edition = "2021"
+default-run = "forge-env"
 
 [lib]
 name = "forge_env_lib"
@@ -23,5 +24,5 @@ tauri-plugin-notification = "2"
 tauri-plugin-updater = "2"
 
 [[bin]]
-name = "forge-env"
+name = "forge-env-cli"
 path = "src/bin/cli.rs"

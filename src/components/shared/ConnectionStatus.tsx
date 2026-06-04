@@ -4,7 +4,7 @@ interface ConnectionStatusProps {
   onReconnect?: () => void; // Reserved for future use
 }
 
-export function ConnectionStatus({ onReconnect }: ConnectionStatusProps) {
+export function ConnectionStatus({ onReconnect: _onReconnect }: ConnectionStatusProps) {
   if (isTauri()) return null;
 
   return (

@@ -39,10 +39,10 @@ npm run tauri:build
 ```bash
 # 从源码构建 CLI
 cd forge-env/src-tauri
-cargo build --release --bin forge-env
+cargo build --release --bin forge-env-cli
 
 # 安装到 PATH
-cp target/release/forge-env /usr/local/bin/
+cp target/release/forge-env-cli /usr/local/bin/
 ```
 
 ## 首次启动

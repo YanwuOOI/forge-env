@@ -3,5 +3,5 @@
   "identifier": "default",
   "description": "Default desktop capability for Forge Env.",
   "windows": ["main"],
-  "permissions": ["core:default", "updater:default"]
+  "permissions": ["core:default", "updater:default", "notification:default", "log:default"]
 }

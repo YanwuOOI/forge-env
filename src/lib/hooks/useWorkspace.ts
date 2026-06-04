@@ -111,7 +111,7 @@ export function useWorkspace() {
   // Initial load
   useEffect(() => {
     void refreshAll(selectedHostId);
-  }, [refreshAll]);
+  }, [refreshAll, selectedHostId]);
 
   // Subscribe to job updates
   useEffect(() => {

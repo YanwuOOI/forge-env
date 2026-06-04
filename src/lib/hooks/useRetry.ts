@@ -26,7 +26,7 @@ export function useRetry(options: UseRetryOptions = {}): UseRetryResult {
         await fn();
         setRetrying(false);
         return true;
-      } catch (_err) {
+      } catch {
         if (attempt < maxRetries) {
           setRetryCount(attempt + 1);
           await new Promise((resolve) => setTimeout(resolve, delayMs * (attempt + 1)));

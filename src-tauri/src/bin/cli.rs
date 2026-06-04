@@ -3,7 +3,7 @@ use forge_env_lib::core::{detect, hosts, mirrors, models, provider, storage};
 
 #[derive(Parser)]
 #[command(
-    name = "forge-env",
+    name = "forge-env-cli",
     about = "Forge Env — Development environment manager CLI",
     version,
     long_about = "Manage language runtimes, mirrors, system dependencies, and environment configuration from the command line."

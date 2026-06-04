@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf};
 
-use log::{error, warn};
+use log::error;
 use rusqlite::{params, Connection};
 
 use super::{models::JobRecord, shell};
@@ -321,7 +321,7 @@ mod tests {
         let storage = temp_storage();
 
         storage.set_setting("test_key", Some("test_value")).unwrap();
-        let snapshot = storage.load().unwrap();
+        let _snapshot = storage.load().unwrap();
         // Settings are loaded by key name, test_key won't match the known keys
         // But we can verify it was stored by checking raw
         let conn = storage.connection().unwrap();

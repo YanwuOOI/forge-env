@@ -42,16 +42,18 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const handleConfirm = useCallback(() => {
-    state?.resolve(true);
+    const resolve = resolveRef.current;
     resolveRef.current = null;
     setState(null);
-  }, [state]);
+    resolve?.(true);
+  }, []);
 
   const handleCancel = useCallback(() => {
-    state?.resolve(false);
+    const resolve = resolveRef.current;
     resolveRef.current = null;
     setState(null);
-  }, [state]);
+    resolve?.(false);
+  }, []);
 
   const contextValue = useMemo(() => confirm, [confirm]);
 

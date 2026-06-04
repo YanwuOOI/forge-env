@@ -1,7 +1,7 @@
 use std::sync::MutexGuard;
 use std::{env, path::PathBuf};
 
-use log::{error, info, warn};
+use log::error;
 use tauri::{AppHandle, Emitter, State};
 
 use crate::{
