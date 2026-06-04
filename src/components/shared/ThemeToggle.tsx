@@ -1,3 +1,4 @@
+import { useI18n } from '../../lib/hooks/useI18n';
 import { Tooltip } from './Tooltip';
 
 interface ThemeToggleProps {
@@ -6,13 +7,15 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
+  const { t } = useI18n();
+
   return (
-    <Tooltip content={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}>
+    <Tooltip content={theme === 'light' ? t('shared.switchToDark') : t('shared.switchToLight')}>
       <button
         type="button"
         onClick={onToggle}
         className="rounded-[var(--radius-md)] bg-[var(--bg-elevated)] px-3 py-2 text-[12px] font-semibold text-[var(--text-secondary)] shadow-[var(--shadow-raised-sm)] transition-[transform,box-shadow] duration-[var(--motion-hover)] ease-[var(--ease-standard)] hover:-translate-y-px hover:shadow-[var(--shadow-raised-md)] active:translate-y-0 active:shadow-[var(--shadow-inset)]"
-        aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+        aria-label={theme === 'light' ? t('shared.switchToDark') : t('shared.switchToLight')}
       >
         {theme === 'light' ? '🌙' : '☀️'}
       </button>

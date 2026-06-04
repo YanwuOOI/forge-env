@@ -1,6 +1,7 @@
 import { memo, useState } from 'react';
 import type { ProjectProfile, ProjectRuntimePolicyOptions, RuntimeFamilyState } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass, buttonDisabledClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 import { ProjectPolicyEditor } from './ProjectPolicyEditor';
 import { normalizeOptionalText } from '../../lib/utils';
 
@@ -20,6 +21,7 @@ interface ProjectsSectionProps {
 }
 
 export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, setQuery, projects, onAlign }: ProjectsSectionProps) {
+  const { t } = useI18n();
   const [policyDrafts, setPolicyDrafts] = useState<ProjectPolicyDraftMap>({});
   const runtimeByFamily = new Map(runtimes.map((runtime) => [runtime.family, runtime]));
 
@@ -28,14 +30,14 @@ export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, 
       <div className={`${cardClass} p-5`}>
         <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-center">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Project discovery</p>
-            <h3 className="mt-2 text-[18px] font-semibold">Marker-driven runtime suggestions</h3>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('projects.projectDiscovery')}</p>
+            <h3 className="mt-2 text-[18px] font-semibold">{t('projects.markerDriven')}</h3>
           </div>
           <div className={`${insetClass} flex items-center gap-3 px-4 py-3`}>
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Filter by path, marker, or project name"
+              placeholder={t('projects.searchPlaceholder')}
               className="w-full min-w-[280px] bg-transparent text-[14px] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
             />
           </div>
@@ -65,7 +67,7 @@ export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, 
 
             <div className="mt-5 grid gap-3 xl:grid-cols-[1.1fr_0.9fr]">
               <div className={`${insetClass} p-4`}>
-                <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Suggested runtimes</p>
+                <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('projects.suggestedRuntimes')}</p>
                 <div className="mt-4 space-y-3">
                   {project.suggestedRuntimes.map((suggestion) => {
                     const runtime = runtimeByFamily.get(suggestion.family);
@@ -89,7 +91,7 @@ export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, 
                           <p className="mt-1 text-[12px] text-[var(--text-secondary)]">{suggestion.reason}</p>
                           {!manageable ? (
                             <p className="mt-2 text-[12px] leading-5 text-[var(--warning)]">
-                              Forge Env can inspect this family, but its provider is not yet in a manageable state on the selected host.
+                              {t('projects.notManageable')}
                             </p>
                           ) : null}
                           {manageable && (suggestion.family === '.NET' || suggestion.family === 'C/C++') ? (
@@ -120,7 +122,7 @@ export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, 
                             )
                           }
                         >
-                          {projectActionLabel(suggestion.family)}
+                          {projectActionLabel(suggestion.family, t)}
                         </button>
                       </div>
                     );
@@ -129,7 +131,7 @@ export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, 
               </div>
 
               <div className={`${insetClass} p-4`}>
-                <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Risk flags</p>
+                <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('projects.riskFlags')}</p>
                 {project.riskFlags.length ? (
                   <div className="mt-4 space-y-2">
                     {project.riskFlags.map((flag) => (
@@ -143,7 +145,7 @@ export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, 
                   </div>
                 ) : (
                   <p className="mt-4 text-[13px] leading-6 text-[var(--text-secondary)]">
-                    No critical drift detected in this project profile.
+                    {t('projects.noRisk')}
                   </p>
                 )}
               </div>
@@ -153,9 +155,9 @@ export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, 
       ) : (
         <div className={`${cardClass} p-6 text-center`}>
           <p className="text-[48px]" role="img" aria-hidden="true">📂</p>
-          <h3 className="mt-3 text-[18px] font-semibold text-[var(--text-primary)]">No projects detected</h3>
+          <h3 className="mt-3 text-[18px] font-semibold text-[var(--text-primary)]">{t('projects.noProjects')}</h3>
           <p className="mt-2 max-w-lg mx-auto text-[13px] leading-6 text-[var(--text-secondary)]">
-            Forge Env scans for project markers like <code className="font-mono text-[12px]">package.json</code>, <code className="font-mono text-[12px]">pyproject.toml</code>, <code className="font-mono text-[12px]">Cargo.toml</code>, and more. Open a project directory to see suggestions.
+            {t('projects.noProjectsHint')}
           </p>
         </div>
       )}
@@ -163,10 +165,10 @@ export const ProjectsSection = memo(function ProjectsSection({ runtimes, query, 
   );
 });
 
-function projectActionLabel(family: string) {
-  if (family === '.NET') return 'Write SDK pin';
-  if (family === 'C/C++') return 'Write CMake preset';
-  return 'Align runtime';
+function projectActionLabel(family: string, t: (key: string) => string) {
+  if (family === '.NET') return t('projects.writeSdkPin');
+  if (family === 'C/C++') return t('projects.writeCmakePreset');
+  return t('projects.alignRuntime');
 }
 
 function projectPolicyKey(projectId: string, family: string) {

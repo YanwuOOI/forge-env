@@ -1,5 +1,6 @@
 import type { SystemDependencyState } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 
 interface DependencyGridProps {
   dependencies: SystemDependencyState[];
@@ -7,11 +8,13 @@ interface DependencyGridProps {
 }
 
 export function DependencyGrid({ dependencies, onInstallTemplate }: DependencyGridProps) {
+  const { t } = useI18n();
+
   return (
     <div className="grid gap-4 xl:grid-cols-[1fr_0.9fr]">
       <div className={`${cardClass} p-5`}>
-        <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Base layer</p>
-        <h3 className="mt-2 text-[18px] font-semibold">One-click dependency template</h3>
+        <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('deps.baseLayer')}</p>
+        <h3 className="mt-2 text-[18px] font-semibold">{t('deps.oneClickTemplate')}</h3>
         <div className="mt-5 grid gap-3 md:grid-cols-2">
           {dependencies.map((dependency) => (
             <div key={dependency.name} className={`${insetClass} px-4 py-4`}>
@@ -32,14 +35,13 @@ export function DependencyGrid({ dependencies, onInstallTemplate }: DependencyGr
       </div>
 
       <div className={`${cardClass} p-5`}>
-        <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Execution</p>
-        <h3 className="mt-2 text-[18px] font-semibold">Template installer entry point</h3>
+        <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('systemDeps.execution')}</p>
+        <h3 className="mt-2 text-[18px] font-semibold">{t('systemDeps.templateEntry')}</h3>
         <p className="mt-3 text-[13px] leading-6 text-[var(--text-secondary)]">
-          This entry point now calls the detected package manager directly. It does not try to elevate
-          privileges for you, so native package manager permission rules still apply.
+          {t('systemDeps.templateDesc')}
         </p>
         <button type="button" className={`${buttonPrimaryClass} mt-5`} onClick={onInstallTemplate}>
-          Install base template
+          {t('systemDeps.installBase')}
         </button>
       </div>
     </div>

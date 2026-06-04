@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import type { HostDetail, HostSummary } from '../../lib/types';
 import { cardClass, insetClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 import { MetricPanel } from '../shared/MetricPanel';
 import { MetricTile } from '../shared/MetricTile';
 
@@ -12,6 +13,8 @@ interface HostsSectionProps {
 }
 
 export const HostsSection = memo(function HostsSection({ hosts, detail, selectedHostId, onSelectHost }: HostsSectionProps) {
+  const { t } = useI18n();
+
   return (
     <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
       <div className="grid gap-4">
@@ -36,13 +39,13 @@ export const HostsSection = memo(function HostsSection({ hosts, detail, selected
             </div>
 
             <div className="mt-5 grid gap-3 md:grid-cols-3">
-              <MetricPanel label="Arch" value={host.architecture} hint="Runtime binaries must match host arch." />
-              <MetricPanel label="Shell" value={host.shell} hint="Used for PATH and profile updates." />
-              <MetricPanel label="Pkg mgr" value={host.recommendedPackageManager} hint="System package abstraction anchor." />
+              <MetricPanel label={t('hosts.arch')} value={host.architecture} hint="Runtime binaries must match host arch." />
+              <MetricPanel label={t('hosts.shell')} value={host.shell} hint="Used for PATH and profile updates." />
+              <MetricPanel label={t('hosts.pkgMgr')} value={host.recommendedPackageManager} hint="System package abstraction anchor." />
             </div>
 
             <div className={`${insetClass} mt-5 p-4`}>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">PATH preview</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('hosts.pathPreview')}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {host.pathPreview.length ? (
                   host.pathPreview.map((entry) => (
@@ -65,8 +68,8 @@ export const HostsSection = memo(function HostsSection({ hosts, detail, selected
       </div>
 
       <div className={`${cardClass} p-5`}>
-        <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Host detail</p>
-        <h3 className="mt-2 text-[18px] font-semibold">Shell and machine policy surface</h3>
+        <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('hosts.hostDetail')}</p>
+        <h3 className="mt-2 text-[18px] font-semibold">{t('hosts.shellMachinePolicy')}</h3>
         {detail ? (
           <div className="mt-5 space-y-4">
             <div className={`${insetClass} grid gap-3 p-4 md:grid-cols-2`}>
@@ -75,7 +78,7 @@ export const HostsSection = memo(function HostsSection({ hosts, detail, selected
             </div>
 
             <div className={`${insetClass} p-4`}>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Shell profiles</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('hosts.shellProfiles')}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {detail.shellProfiles.map((profile) => (
                   <span key={profile} className="rounded-[var(--radius-pill)] bg-[var(--bg-elevated)] px-3 py-1 font-mono text-[11px] text-[var(--text-secondary)] shadow-[var(--shadow-raised-sm)]">
@@ -86,7 +89,7 @@ export const HostsSection = memo(function HostsSection({ hosts, detail, selected
             </div>
 
             <div className={`${insetClass} p-4`}>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Package managers</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('hosts.packageManagers')}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {detail.packageManagers.map((manager) => (
                   <span key={manager} className="rounded-[var(--radius-pill)] border border-[var(--border-soft)] px-3 py-1 text-[12px] text-[var(--text-secondary)]">
@@ -97,7 +100,7 @@ export const HostsSection = memo(function HostsSection({ hosts, detail, selected
             </div>
 
             <div className={`${insetClass} p-4`}>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Working context</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('hosts.workingContext')}</p>
               <p className="mt-3 font-mono text-[11px] leading-5 text-[var(--text-secondary)]">{detail.cwd}</p>
               <p className="mt-2 font-mono text-[11px] leading-5 text-[var(--text-secondary)]">{detail.homeDir}</p>
               <div className="mt-4 space-y-2">
@@ -110,7 +113,7 @@ export const HostsSection = memo(function HostsSection({ hosts, detail, selected
             </div>
           </div>
         ) : (
-          <p className="mt-4 text-[13px] leading-6 text-[var(--text-secondary)]">No host detail loaded.</p>
+          <p className="mt-4 text-[13px] leading-6 text-[var(--text-secondary)]">{t('hosts.noDetail')}</p>
         )}
       </div>
     </div>

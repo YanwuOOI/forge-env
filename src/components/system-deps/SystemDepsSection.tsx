@@ -8,6 +8,7 @@ import type {
   SystemDependencyState,
 } from '../../lib/types';
 import { cardClass, insetClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 import { DependencyGrid } from './DependencyGrid';
 import { ServiceCard } from './ServiceCard';
 import { summarizeServiceTask } from './serviceTaskSummary';
@@ -55,6 +56,7 @@ export const SystemDepsSection = memo(function SystemDepsSection({
   onValidateServiceArtifact,
   onDeleteServiceArtifact,
 }: SystemDepsSectionProps) {
+  const { t } = useI18n();
   const configByService = new Map(serviceConfigs.map((config) => [config.serviceName, config]));
   const artifactsByService = new Map(
     services.map((service) => [
@@ -70,8 +72,8 @@ export const SystemDepsSection = memo(function SystemDepsSection({
       <div className={`${cardClass} p-5`}>
         <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Service provider MVP</p>
-            <h3 className="mt-2 text-[18px] font-semibold">Data stores, queues, and edge proxy</h3>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('deps.serviceMvp')}</p>
+            <h3 className="mt-2 text-[18px] font-semibold">{t('deps.dataStores')}</h3>
             <p className="mt-3 max-w-3xl text-[13px] leading-6 text-[var(--text-secondary)]">
               Forge Env now tracks Redis, PostgreSQL, MySQL, MongoDB, RabbitMQ, and Nginx per host. It can
               start, stop, or restart them through the host service manager, while Redis and PostgreSQL still
@@ -80,10 +82,10 @@ export const SystemDepsSection = memo(function SystemDepsSection({
           </div>
           <div className={`${insetClass} flex items-center gap-3 px-4 py-3`}>
             <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
-              {services.filter((service) => service.running).length} running
+              {services.filter((service) => service.running).length} {t('deps.running')}
             </span>
             <span className="rounded-[var(--radius-pill)] bg-[var(--bg-elevated)] px-3 py-1 text-[12px] font-semibold text-[var(--text-secondary)] shadow-[var(--shadow-raised-sm)]">
-              {services.length} tracked
+              {services.length} {t('deps.tracked')}
             </span>
           </div>
         </div>
@@ -100,7 +102,7 @@ export const SystemDepsSection = memo(function SystemDepsSection({
               (service.name === 'Redis' || Boolean(config.configPath)) &&
               (config.canEditPort || config.canEditDataDir);
             const canApplyAndReconcile = canApplyConfig && service.installed;
-            const reconcileLabel = service.running ? 'Apply + restart' : 'Apply + start';
+            const reconcileLabel = service.running ? t('systemDeps.applyPlusRestart') : t('systemDeps.applyPlusStart');
             const logicalBackupCapable = ['PostgreSQL', 'MySQL'].includes(service.name);
             const artifacts = artifactsByService.get(service.name) ?? [];
             const latestBackup = artifacts.find((artifact) => artifact.kind === 'backup');
