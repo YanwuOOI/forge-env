@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { ServiceConfigState, ServiceState } from '../../lib/types';
 import { cardClass, buttonPrimaryClass, buttonSecondaryClass, buttonDisabledClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 
 interface ServiceConfigEditorProps {
   service: ServiceState;
@@ -25,18 +26,20 @@ export function ServiceConfigEditor({
   onApplyServiceConfig,
   onApplyServiceConfigAndRestart,
 }: ServiceConfigEditorProps) {
+  const { t } = useI18n();
+
   return (
     <div className={`${cardClass} mt-4 space-y-4 p-4`}>
       <div>
-        <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--text-muted)]">Managed config</p>
+        <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('systemDeps.managedConfig')}</p>
         <p className="mt-2 font-mono text-[11px] leading-5 text-[var(--text-secondary)]">
-          {config.configPath ?? 'No writable config path detected yet.'}
+          {config.configPath ?? t('systemDeps.noConfigPath')}
         </p>
       </div>
 
       <div className="grid gap-3">
         <label className="grid gap-2">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Override port</span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('systemDeps.overridePort')}</span>
           <input
             type="number"
             inputMode="numeric"
@@ -60,7 +63,7 @@ export function ServiceConfigEditor({
         </label>
 
         <label className="grid gap-2">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Data directory</span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('systemDeps.dataDirectory')}</span>
           <input
             type="text"
             value={draft.dataDir}
@@ -96,7 +99,7 @@ export function ServiceConfigEditor({
             )
           }
         >
-          Apply config
+          {t('systemDeps.applyConfig')}
         </button>
         <button
           type="button"
@@ -125,15 +128,14 @@ export function ServiceConfigEditor({
             }))
           }
         >
-          Reset fields
+          {t('projects.resetFields')}
         </button>
       </div>
 
       <div className="space-y-2">
         {canApplyConfig ? (
           <p className="text-[12px] leading-5 text-[var(--text-secondary)]">
-            Use `Apply config` to stage changes only, or `{reconcileLabel}` to write the
-            managed block and immediately {service.running ? 'restart the current process' : 'start the service with the new settings'}.
+            {t('systemDeps.configInstruction').replace('{label}', reconcileLabel).replace('{action}', service.running ? 'restart the current process' : 'start the service with the new settings')}
           </p>
         ) : null}
         {config.notes.map((note) => (

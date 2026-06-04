@@ -1,5 +1,6 @@
 import type { ProjectRuntimePolicyOptions } from '../../lib/types';
 import { insetClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 
 interface ProjectPolicyEditorProps {
   family: string;
@@ -8,13 +9,15 @@ interface ProjectPolicyEditorProps {
 }
 
 export function ProjectPolicyEditor({ family, options, onChange }: ProjectPolicyEditorProps) {
+  const { t } = useI18n();
+
   if (family === '.NET') {
     const dotnet = options.dotnet ?? {};
     return (
       <div className="grid gap-3 md:grid-cols-[minmax(0,220px)_auto] md:items-end">
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
           <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
-            rollForward
+            {t('projects.rollForward')}
           </span>
           <select
             value={dotnet.rollForward ?? ''}
@@ -53,7 +56,7 @@ export function ProjectPolicyEditor({ family, options, onChange }: ProjectPolicy
             }
             className="size-4 rounded border border-[var(--border-soft)] accent-[var(--accent-primary)]"
           />
-          <span>Allow prerelease SDK resolution</span>
+          <span>{t('projects.allowPrerelease')}</span>
         </label>
       </div>
     );
@@ -65,7 +68,7 @@ export function ProjectPolicyEditor({ family, options, onChange }: ProjectPolicy
       <div className="grid gap-3 md:grid-cols-2">
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
           <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
-            Generator
+            {t('projects.generator')}
           </span>
           <select
             value={cpp.generator ?? ''}
@@ -79,7 +82,7 @@ export function ProjectPolicyEditor({ family, options, onChange }: ProjectPolicy
             }
             className={`${insetClass} px-3 py-3 text-[13px] text-[var(--text-primary)] outline-none`}
           >
-            <option value="">Auto detect</option>
+            <option value="">{t('projects.autoDetect')}</option>
             <option value="Ninja">Ninja</option>
             <option value="Unix Makefiles">Unix Makefiles</option>
             <option value="NMake Makefiles">NMake Makefiles</option>
@@ -87,7 +90,7 @@ export function ProjectPolicyEditor({ family, options, onChange }: ProjectPolicy
         </label>
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
           <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
-            Build type
+            {t('projects.buildType')}
           </span>
           <select
             value={cpp.buildType ?? ''}
@@ -101,7 +104,7 @@ export function ProjectPolicyEditor({ family, options, onChange }: ProjectPolicy
             }
             className={`${insetClass} px-3 py-3 text-[13px] text-[var(--text-primary)] outline-none`}
           >
-            <option value="">Unspecified</option>
+            <option value="">{t('projects.unspecified')}</option>
             <option value="Debug">Debug</option>
             <option value="Release">Release</option>
             <option value="RelWithDebInfo">RelWithDebInfo</option>
@@ -110,7 +113,7 @@ export function ProjectPolicyEditor({ family, options, onChange }: ProjectPolicy
         </label>
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
           <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
-            Binary dir
+            {t('projects.binaryDir')}
           </span>
           <input
             value={cpp.binaryDir ?? ''}
@@ -128,7 +131,7 @@ export function ProjectPolicyEditor({ family, options, onChange }: ProjectPolicy
         </label>
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
           <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
-            Toolchain file
+            {t('projects.toolchainFile')}
           </span>
           <input
             value={cpp.toolchainFile ?? ''}

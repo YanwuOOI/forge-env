@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { ProxySettings } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass, buttonSecondaryClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 
 interface ProxyPanelProps {
   proxySettings: ProxySettings;
@@ -19,10 +20,12 @@ export function ProxyPanel({
   onSaveProxySettings,
   onClearProxySettings,
 }: ProxyPanelProps) {
+  const { t } = useI18n();
+
   return (
     <div className={`${cardClass} p-5`}>
-      <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Secure proxy profile</p>
-      <h3 className="mt-2 text-[18px] font-semibold">Store proxy credentials in the system vault</h3>
+      <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('settings.proxyProfile')}</p>
+      <h3 className="mt-2 text-[18px] font-semibold">{t('settings.storeCredentials')}</h3>
       <p className="mt-3 text-[13px] leading-6 text-[var(--text-secondary)]">
         Forge Env stores host, port, and username in its managed settings file, while the password is delegated to{' '}
         {proxySettings.secureStore}.
@@ -40,11 +43,11 @@ export function ProxyPanel({
             }
             className="size-4 rounded border border-[var(--border-soft)] accent-[var(--accent-primary)]"
           />
-          <span>Enable managed proxy profile</span>
+          <span>{t('settings.enableProxy')}</span>
         </label>
         <div className={`${insetClass} flex items-center justify-between gap-3 px-4 py-3`}>
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Credential store</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.credentialStore')}</p>
             <p className="mt-1 text-[13px] font-semibold text-[var(--text-primary)]">{proxySettings.secureStore}</p>
           </div>
           <span
@@ -54,11 +57,11 @@ export function ProxyPanel({
                 : 'bg-[rgba(209,138,29,0.14)] text-[var(--warning)]'
             }`}
           >
-            {proxySettings.passwordSaved ? 'Password saved' : 'No password saved'}
+            {proxySettings.passwordSaved ? t('settings.passwordSaved') : t('settings.noPassword')}
           </span>
         </div>
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
-          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Scheme</span>
+          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.proxyScheme')}</span>
           <select
             value={proxySettings.scheme}
             onChange={(event) =>
@@ -72,7 +75,7 @@ export function ProxyPanel({
           </select>
         </label>
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
-          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Host</span>
+          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.proxyHost')}</span>
           <input
             value={proxySettings.host}
             onChange={(event) =>
@@ -83,7 +86,7 @@ export function ProxyPanel({
           />
         </label>
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
-          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Port</span>
+          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.proxyPort')}</span>
           <input
             value={proxySettings.port}
             onChange={(event) =>
@@ -94,7 +97,7 @@ export function ProxyPanel({
           />
         </label>
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
-          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Username</span>
+          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.proxyUsername')}</span>
           <input
             value={proxySettings.username}
             onChange={(event) =>
@@ -105,7 +108,7 @@ export function ProxyPanel({
           />
         </label>
         <label className="grid gap-2 text-[12px] text-[var(--text-secondary)]">
-          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Password</span>
+          <span className="font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('settings.proxyPassword')}</span>
           <input
             type="password"
             value={proxyPasswordDraft}
@@ -119,15 +122,11 @@ export function ProxyPanel({
       </div>
       <div className="mt-4 flex flex-wrap gap-3">
         <button type="button" className={buttonPrimaryClass} onClick={onSaveProxySettings}>
-          Save proxy profile
+          {t('settings.saveProxy')}
         </button>
         <button type="button" className={buttonSecondaryClass} onClick={onClearProxySettings}>
-          Clear proxy profile
+          {t('settings.clearProxy')}
         </button>
-      </div>
-      <div className="mt-4 space-y-2 text-[12px] leading-5 text-[var(--text-secondary)]">
-        <p>Save writes the non-secret proxy profile into Forge Env settings and updates the system credential entry only when a new password is supplied.</p>
-        <p>Clear removes the managed proxy profile and asks the secure store to delete the saved password for the current username.</p>
       </div>
     </div>
   );
