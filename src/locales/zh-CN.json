@@ -5,6 +5,7 @@
     "description": "一个 Tauri 壳，管理语言版本、镜像、PATH 策略和项目检测。"
   },
   "nav": {
+    "mainNavigation": "主导航",
     "overview": "概览",
     "overviewEyebrow": "控制中心",
     "hosts": "主机",
@@ -30,7 +31,7 @@
     "activeHost": "当前主机",
     "noHost": "未加载主机",
     "refresh": "刷新快照",
-    "description": "当前构建涵盖主机发现、运行时状态、项目检查、镜像预设、系统依赖检查，以及主机感知的导出/导入工作流。"
+    "description": "当前构建涵盖主机发现、运行时状态、项目检查、镜像预设、系统依赖检查，以及主机感知的导出/导入工作流。运行时、镜像、依赖和环境操作现在调用真实的本地工具，导入计划能够从导出的包中重建匹配的主机。.NET SDK 安装及项目固定、C/C++ 工具链模板安装及预设提示现已包含在运行时面板中。"
   },
   "overview": {
     "workspacePulse": "工作区脉搏",
@@ -47,7 +48,11 @@
     "preset": "预设",
     "applyPreset": "应用预设",
     "architectureNote": "架构说明",
-    "whyCompact": "为什么这个界面保持紧凑"
+    "whyCompact": "为什么这个界面保持紧凑",
+    "hostsHint": "原生 + WSL 分别建模",
+    "runtimesHint": "在 Python、Node.js、Rust、Java、Go、.NET、PHP、Ruby 和 C/C++ 中已安装的版本",
+    "jobsHint": "排队中、运行中和已完成的任务",
+    "architectureDesc": "卡片保持浅层，焦点环保持显式，界面限制在三个层级，使得开发者工具更像仪器面板而非拟物玩具。"
   },
   "hosts": {
     "hostDetail": "主机详情",
@@ -68,7 +73,9 @@
     "remove": "移除",
     "policyHooks": "策略钩子",
     "noRuntimes": "尚未安装运行时",
-    "noRuntimesHint": "安装您的第一个语言运行时开始使用。Forge Env 支持 Python、Node.js、Rust、Java、Go、.NET、PHP、Ruby 和 C/C++。"
+    "noRuntimesHint": "安装您的第一个语言运行时开始使用。Forge Env 支持 Python、Node.js、Rust、Java、Go、.NET、PHP、Ruby 和 C/C++。",
+    "install": "安装",
+    "binaryUnavailable": "二进制不可用"
   },
   "projects": {
     "projectDiscovery": "项目发现",
@@ -151,6 +158,30 @@
   },
   "toast": {
     "dismiss": "关闭"
+  },
+  "jobs": {
+    "queue": "任务队列",
+    "recentTasks": "最近的任务",
+    "pending": "{count} 个待处理",
+    "relevant": "相关的",
+    "all": "所有任务",
+    "showingRelevant": "显示与 {view} 最相关的 {count} 个任务。",
+    "showingAll": "显示所有类别中的最新 {count} 个任务。",
+    "processing": "处理中...",
+    "next": "下一步"
+  },
+  "runtimePolicy": {
+    "runtimePolicy": "运行时策略",
+    "canonicalChoices": "规范提供商选择",
+    "python": "pyenv 加上 pip、pipenv 和 poetry。",
+    "node": "Volta 作为跨平台运行时锚点，而非 nvm。",
+    "rust": "rustup 和 cargo，在所有三个桌面操作系统上一等公民。",
+    "java": "SDKMAN! 作为首选的 Unix 端管理器，Maven 和 Gradle 被检测为配套工具。",
+    "go": "官方工具链基线优先，gvm 视为可选而非必需。",
+    "dotnet": "可用的官方用户空间 SDK 安装，global.json 作为激活的项目固定接口。",
+    "php": "phpbrew 管理版本，Composer 视为配套工具。",
+    "ruby": "rbenv 和 ruby-build，gems 和 Bundler 在选定的运行时之上分层。",
+    "cpp": "仅主机编译器和构建工具链检查，clang/gcc/MSVC 和 CMake/Ninja 仅展示而不修改。"
   },
   "connection": {
     "browserPreview": "浏览器预览模式",

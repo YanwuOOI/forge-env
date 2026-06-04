@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import type { HostSummary, JobRecord, RuntimeFamilyState } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 import { MetricPanel } from '../shared/MetricPanel';
 import { RuntimeHealthBadge } from '../shared/RuntimeHealthBadge';
 
@@ -13,6 +14,8 @@ interface OverviewSectionProps {
   setMirrorPreset: (value: string) => void;
 }
 
+const mirrorOptions = ['Tsinghua', 'Aliyun', 'Huawei Cloud', 'Company Proxy'];
+
 export const OverviewSection = memo(function OverviewSection({
   hosts,
   runtimes,
@@ -21,34 +24,36 @@ export const OverviewSection = memo(function OverviewSection({
   mirrorPreset,
   setMirrorPreset,
 }: OverviewSectionProps) {
+  const { t } = useI18n();
+
   return (
     <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
       <div className="space-y-4">
         <div className={`${cardClass} p-5`}>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Workspace pulse</p>
-              <h3 className="mt-2 text-[18px] font-semibold">System landscape snapshot</h3>
+              <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('overview.workspacePulse')}</p>
+              <h3 className="mt-2 text-[18px] font-semibold">{t('overview.systemLandscape')}</h3>
             </div>
             <div className={`${insetClass} flex items-center gap-2 px-3 py-2`}>
               <span className="size-2 rounded-full bg-[var(--success)]" />
               <span className="text-[12px] font-semibold text-[var(--text-secondary)]">
-                {hosts.length} host layer{hosts.length > 1 ? 's' : ''}
+                {hosts.length} {t('overview.hostLayers')}
               </span>
             </div>
           </div>
 
           <div className="mt-5 grid gap-3 md:grid-cols-3">
-            <MetricPanel label="Detected hosts" value={String(hosts.length)} hint="Native + WSL modeled separately" />
+            <MetricPanel label={t('overview.detectedHosts')} value={String(hosts.length)} hint={t('overview.hostsHint')} />
             <MetricPanel
-              label="Managed runtimes"
+              label={t('overview.managedRuntimes')}
               value={String(runtimes.reduce((sum, runtime) => sum + runtime.installed.length, 0))}
-              hint="Installed versions across Python, Node.js, Rust, Java, Go, .NET, PHP, Ruby, and C/C++"
+              hint={t('overview.runtimesHint')}
             />
             <MetricPanel
-              label="Recent jobs"
+              label={t('overview.recentJobs')}
               value={String(jobs.length)}
-              hint="Queued, running, and completed orchestration tasks"
+              hint={t('overview.jobsHint')}
             />
           </div>
         </div>
@@ -56,8 +61,8 @@ export const OverviewSection = memo(function OverviewSection({
         <div className={`${cardClass} p-5`}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Runtime focus</p>
-              <h3 className="mt-2 text-[18px] font-semibold">Default versions per language family</h3>
+              <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('overview.runtimeFocus')}</p>
+              <h3 className="mt-2 text-[18px] font-semibold">{t('overview.defaultVersions')}</h3>
             </div>
           </div>
 
@@ -73,7 +78,7 @@ export const OverviewSection = memo(function OverviewSection({
                     <RuntimeHealthBadge runtime={runtime} />
                   </div>
                   <p className="mt-3 text-[22px] font-semibold text-[var(--text-primary)]">
-                    {active?.version ?? 'Not installed'}
+                    {active?.version ?? t('overview.notInstalled')}
                   </p>
                   <p className="mt-2 text-[13px] leading-6 text-[var(--text-secondary)]">{runtime.provider}</p>
                 </div>
@@ -85,34 +90,32 @@ export const OverviewSection = memo(function OverviewSection({
 
       <div className="space-y-4">
         <div className={`${cardClass} p-5`}>
-          <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Mirror preset</p>
-          <h3 className="mt-2 text-[18px] font-semibold">Apply domestic mirrors safely</h3>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('overview.mirrorPreset')}</p>
+          <h3 className="mt-2 text-[18px] font-semibold">{t('overview.applyDomesticMirrors')}</h3>
           <div className={`${insetClass} mt-5 p-4`}>
             <label className="block text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">
-              Preset
+              {t('overview.preset')}
             </label>
             <select
               value={mirrorPreset}
               onChange={(event) => setMirrorPreset(event.target.value)}
               className="mt-3 w-full appearance-none rounded-[var(--radius-md)] border border-[var(--border-soft)] bg-[var(--bg-elevated)] px-4 py-3 text-[14px] text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-[var(--focus-ring)]"
             >
-              <option>Tsinghua</option>
-              <option>Aliyun</option>
-              <option>Huawei Cloud</option>
-              <option>Company Proxy</option>
+              {mirrorOptions.map((opt) => (
+                <option key={opt}>{opt}</option>
+              ))}
             </select>
             <button type="button" className={`${buttonPrimaryClass} mt-4 w-full`} onClick={onMirrorApply}>
-              Apply preset
+              {t('overview.applyPreset')}
             </button>
           </div>
         </div>
 
         <div className={`${cardClass} p-5`}>
-          <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Architecture note</p>
-          <h3 className="mt-2 text-[18px] font-semibold">Why this UI stays compact</h3>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('overview.architectureNote')}</p>
+          <h3 className="mt-2 text-[18px] font-semibold">{t('overview.whyCompact')}</h3>
           <p className="mt-3 text-[13px] leading-6 text-[var(--text-secondary)]">
-            Cards stay shallow, focus rings remain explicit, and the interface caps itself at three elevation
-            levels so the developer tool reads like an instrument panel rather than a skeuomorphic toy.
+            {t('overview.architectureDesc')}
           </p>
         </div>
       </div>

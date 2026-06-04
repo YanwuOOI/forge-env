@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import type { RuntimeFamilyState } from '../../lib/types';
 import { cardClass, insetClass, buttonPrimaryClass, buttonSecondaryClass, buttonDisabledClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 import { RuntimeHealthBadge } from '../shared/RuntimeHealthBadge';
 
 interface LanguagesSectionProps {
@@ -11,6 +12,7 @@ interface LanguagesSectionProps {
 }
 
 export const LanguagesSection = memo(function LanguagesSection({ runtimes, onInstall, onSwitch, onRemove }: LanguagesSectionProps) {
+  const { t } = useI18n();
   const totalInstalled = runtimes.reduce((sum, r) => sum + r.installed.length, 0);
 
   return (
@@ -18,9 +20,9 @@ export const LanguagesSection = memo(function LanguagesSection({ runtimes, onIns
       {totalInstalled === 0 ? (
         <div className={`${cardClass} p-6 text-center`}>
           <p className="text-[48px]" role="img" aria-hidden="true">📦</p>
-          <h3 className="mt-3 text-[18px] font-semibold text-[var(--text-primary)]">No runtimes installed yet</h3>
+          <h3 className="mt-3 text-[18px] font-semibold text-[var(--text-primary)]">{t('languages.noRuntimes')}</h3>
           <p className="mt-2 text-[13px] leading-6 text-[var(--text-secondary)]">
-            Install your first language runtime to get started. Forge Env supports Python, Node.js, Rust, Java, Go, .NET, PHP, Ruby, and C/C++.
+            {t('languages.noRuntimesHint')}
           </p>
         </div>
       ) : null}
@@ -57,7 +59,7 @@ export const LanguagesSection = memo(function LanguagesSection({ runtimes, onIns
                   className={canInstall ? buttonPrimaryClass : buttonDisabledClass}
                   onClick={() => onInstall(runtime.family, version)}
                 >
-                  Install {version}
+                  {t('languages.install')} {version}
                 </button>
               ))}
             </div>
@@ -65,7 +67,7 @@ export const LanguagesSection = memo(function LanguagesSection({ runtimes, onIns
 
           <div className="mt-5 grid gap-3 xl:grid-cols-[1.2fr_0.8fr]">
             <div className={`${insetClass} p-4`}>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Installed versions</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('languages.installedVersions')}</p>
               <div className="mt-4 space-y-3">
                 {runtime.installed.map((installation) => (
                   <div
@@ -83,7 +85,7 @@ export const LanguagesSection = memo(function LanguagesSection({ runtimes, onIns
                     <div className="flex flex-wrap gap-2">
                       {installation.active ? (
                         <span className="rounded-[var(--radius-pill)] bg-[rgba(31,157,104,0.12)] px-3 py-1 text-[11px] font-semibold text-[var(--success)]">
-                          Active
+                          {t('languages.active')}
                         </span>
                       ) : (
                         <button
@@ -92,7 +94,7 @@ export const LanguagesSection = memo(function LanguagesSection({ runtimes, onIns
                           className={canActivate ? buttonSecondaryClass : buttonDisabledClass}
                           onClick={() => onSwitch(runtime.family, installation.version)}
                         >
-                          Activate
+                          {t('languages.activate')}
                         </button>
                       )}
                       <button
@@ -101,7 +103,7 @@ export const LanguagesSection = memo(function LanguagesSection({ runtimes, onIns
                         className={canRemove ? buttonSecondaryClass : buttonDisabledClass}
                         onClick={() => onRemove(runtime.family, installation.version)}
                       >
-                        Remove
+                        {t('languages.remove')}
                       </button>
                     </div>
                   </div>
@@ -110,11 +112,11 @@ export const LanguagesSection = memo(function LanguagesSection({ runtimes, onIns
             </div>
 
             <div className={`${insetClass} p-4`}>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">Policy hooks</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{t('languages.policyHooks')}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <RuntimeHealthBadge runtime={runtime} />
                 <span className="rounded-[var(--radius-pill)] border border-[var(--border-soft)] px-3 py-1 font-mono text-[11px] text-[var(--text-secondary)]">
-                  {runtime.detectedBinary ?? 'binary unavailable'}
+                  {runtime.detectedBinary ?? t('languages.binaryUnavailable')}
                 </span>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">

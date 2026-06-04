@@ -1,5 +1,6 @@
 import type { NavKey, JobRecord } from '../../lib/types';
-import { navItems, cardClass, insetClass, buttonSecondaryClass } from '../../lib/constants';
+import { cardClass, insetClass, buttonSecondaryClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 import { filterJobsForView, jobStatusClass } from '../../lib/utils';
 
 type JobFilterMode = 'relevant' | 'all';
@@ -13,6 +14,7 @@ interface JobQueueProps {
 }
 
 export function JobQueue({ jobs, activeView, jobFilterMode, setJobFilterMode, pendingJobs }: JobQueueProps) {
+  const { t } = useI18n();
   const visibleJobs = filterJobsForView(jobs, activeView, jobFilterMode);
   const completedJobs = visibleJobs.filter((job) => job.status === 'completed').slice(0, 4);
   const relevantJobCount = filterJobsForView(jobs, activeView, 'relevant').length;
@@ -21,33 +23,33 @@ export function JobQueue({ jobs, activeView, jobFilterMode, setJobFilterMode, pe
     <div className={`${cardClass} p-4`}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">Job Queue</p>
-          <h3 className="mt-2 text-[16px] font-semibold">Recent orchestration tasks</h3>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">{t('jobs.queue')}</p>
+          <h3 className="mt-2 text-[16px] font-semibold">{t('jobs.recentTasks')}</h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-[12px] font-semibold text-[var(--text-secondary)]">
-            {pendingJobs.length} pending
+            {pendingJobs.length} {t('jobs.pending').replace('{count}', String(pendingJobs.length))}
           </span>
           <button
             type="button"
             className={jobFilterMode === 'relevant' ? buttonSecondaryClass : `${buttonSecondaryClass} opacity-75`}
             onClick={() => setJobFilterMode('relevant')}
           >
-            Relevant
+            {t('jobs.relevant')}
           </button>
           <button
             type="button"
             className={jobFilterMode === 'all' ? buttonSecondaryClass : `${buttonSecondaryClass} opacity-75`}
             onClick={() => setJobFilterMode('all')}
           >
-            All jobs
+            {t('jobs.all')}
           </button>
         </div>
       </div>
       <p className="mt-3 text-[12px] leading-5 text-[var(--text-secondary)]">
         {jobFilterMode === 'relevant'
-          ? `Showing ${relevantJobCount} task(s) most relevant to ${navItems.find((item) => item.key === activeView)?.label ?? 'this view'}.`
-          : `Showing the latest ${jobs.length} task(s) across every workflow category.`}
+          ? t('jobs.showingRelevant').replace('{count}', String(relevantJobCount)).replace('{view}', t(`nav.${activeView}`))
+          : t('jobs.showingAll').replace('{count}', String(jobs.length))}
       </p>
       <div className="mt-4 space-y-3">
         {(completedJobs.length ? completedJobs : visibleJobs).map((job) => (
@@ -80,7 +82,7 @@ export function JobQueue({ jobs, activeView, jobFilterMode, setJobFilterMode, pe
                 <div className="mt-2">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[11px] text-[var(--text-muted)]">
-                      {job.progressLabel ?? 'Processing...'}
+                      {job.progressLabel ?? t('jobs.processing')}
                     </span>
                     <span className="font-mono text-[11px] text-[var(--text-muted)]">
                       {Math.round(job.progress * 100)}%
@@ -92,7 +94,7 @@ export function JobQueue({ jobs, activeView, jobFilterMode, setJobFilterMode, pe
                     aria-valuenow={Math.round(job.progress * 100)}
                     aria-valuemin={0}
                     aria-valuemax={100}
-                    aria-label={job.progressLabel ?? 'Processing'}
+                    aria-label={job.progressLabel ?? t('jobs.processing')}
                   >
                     <div
                       className="h-full rounded-full bg-[var(--accent-primary)] transition-all duration-300"
@@ -102,7 +104,7 @@ export function JobQueue({ jobs, activeView, jobFilterMode, setJobFilterMode, pe
                 </div>
               ) : null}
               {job.nextStep ? (
-                <p className="mt-2 text-[12px] leading-5 text-[var(--text-muted)]">Next: {job.nextStep}</p>
+                <p className="mt-2 text-[12px] leading-5 text-[var(--text-muted)]">{t('jobs.next')}: {job.nextStep}</p>
               ) : null}
               <p className="mt-1 font-mono text-[11px] text-[var(--text-muted)]">{job.timestamp}</p>
             </div>

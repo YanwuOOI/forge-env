@@ -5,6 +5,7 @@
     "description": "A Tauri shell for language versions, mirrors, PATH policy, and project detection."
   },
   "nav": {
+    "mainNavigation": "Main navigation",
     "overview": "Overview",
     "overviewEyebrow": "Command center",
     "hosts": "Hosts",
@@ -30,7 +31,7 @@
     "activeHost": "Active host",
     "noHost": "No host loaded",
     "refresh": "Refresh snapshot",
-    "description": "Current build covers host discovery, runtime state, project inspection, mirror presets, system dependency checks, and host-aware export/import workflows."
+    "description": "Current build covers host discovery, runtime state, project inspection, mirror presets, system dependency checks, and host-aware export/import workflows. Runtime, mirror, dependency, and environment actions now call real local tools, with import plans able to reconstruct matching hosts from an exported bundle. .NET SDK install plus project pinning, and C/C++ toolchain template install plus preset hints, are now included in the runtime surface."
   },
   "overview": {
     "workspacePulse": "Workspace pulse",
@@ -48,7 +49,11 @@
     "preset": "Preset",
     "applyPreset": "Apply preset",
     "architectureNote": "Architecture note",
-    "whyCompact": "Why this UI stays compact"
+    "whyCompact": "Why this UI stays compact",
+    "hostsHint": "Native + WSL modeled separately",
+    "runtimesHint": "Installed versions across Python, Node.js, Rust, Java, Go, .NET, PHP, Ruby, and C/C++",
+    "jobsHint": "Queued, running, and completed orchestration tasks",
+    "architectureDesc": "Cards stay shallow, focus rings remain explicit, and the interface caps itself at three elevation levels so the developer tool reads like an instrument panel rather than a skeuomorphic toy."
   },
   "hosts": {
     "hostDetail": "Host detail",
@@ -69,7 +74,9 @@
     "remove": "Remove",
     "policyHooks": "Policy hooks",
     "noRuntimes": "No runtimes installed yet",
-    "noRuntimesHint": "Install your first language runtime to get started. Forge Env supports Python, Node.js, Rust, Java, Go, .NET, PHP, Ruby, and C/C++."
+    "noRuntimesHint": "Install your first language runtime to get started. Forge Env supports Python, Node.js, Rust, Java, Go, .NET, PHP, Ruby, and C/C++.",
+    "install": "Install",
+    "binaryUnavailable": "binary unavailable"
   },
   "projects": {
     "projectDiscovery": "Project discovery",
@@ -152,6 +159,30 @@
   },
   "toast": {
     "dismiss": "Dismiss"
+  },
+  "jobs": {
+    "queue": "Job Queue",
+    "recentTasks": "Recent orchestration tasks",
+    "pending": "{count} pending",
+    "relevant": "Relevant",
+    "all": "All jobs",
+    "showingRelevant": "Showing {count} task(s) most relevant to {view}.",
+    "showingAll": "Showing the latest {count} task(s) across every workflow category.",
+    "processing": "Processing...",
+    "next": "Next"
+  },
+  "runtimePolicy": {
+    "runtimePolicy": "Runtime policy",
+    "canonicalChoices": "Canonical provider choices",
+    "python": "pyenv plus pip, pipenv, and poetry.",
+    "node": "Volta as cross-platform runtime anchor, not nvm.",
+    "rust": "rustup and cargo, first-class across all three desktop OS targets.",
+    "java": "SDKMAN! as the preferred Unix-side manager, with Maven and Gradle detected as companion tooling.",
+    "go": "Official toolchain baseline first, with gvm treated as optional rather than required.",
+    "dotnet": "Official user-space SDK install is available, while global.json remains the project pinning surface for activation.",
+    "php": "phpbrew for managed versions, with Composer treated as companion tooling.",
+    "ruby": "rbenv plus ruby-build, with gems and Bundler layered above the selected runtime.",
+    "cpp": "Host compiler and build toolchain inspection only, with clang/gcc/MSVC and CMake/Ninja surfaced without mutation."
   },
   "connection": {
     "browserPreview": "Browser preview mode",

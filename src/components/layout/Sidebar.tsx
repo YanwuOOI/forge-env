@@ -1,6 +1,7 @@
 import { startTransition } from 'react';
 import type { NavKey } from '../../lib/types';
 import { navItems, panelClass, insetClass, cardClass } from '../../lib/constants';
+import { useI18n } from '../../lib/hooks/useI18n';
 import { MetricTile } from '../shared/MetricTile';
 import { NavGlyph } from '../shared/NavGlyph';
 import { ThemeToggle } from '../shared/ThemeToggle';
@@ -16,24 +17,26 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeView, setActiveView, hostsCount, totalInstalledRuntimes, busyLabel, theme, onToggleTheme }: SidebarProps) {
+  const { t } = useI18n();
+
   return (
     <aside className={`${panelClass} flex flex-col gap-4 p-4`}>
       <div className="rounded-[var(--radius-md)] bg-[linear-gradient(145deg,rgba(255,255,255,0.55),rgba(220,231,255,0.55))] p-4 shadow-[var(--shadow-raised-sm)]">
         <div className="flex items-center justify-between">
           <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--text-muted)]">
-            Forge Env
+            {t('app.name')}
           </p>
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
         </div>
         <h1 className="mt-2 text-[28px] font-semibold leading-[1.05] text-[var(--text-primary)]">
-          Soft industrial control room for runtimes.
+          {t('app.tagline')}
         </h1>
         <p className="mt-3 text-[13px] leading-6 text-[var(--text-secondary)]">
-          A Tauri shell for language versions, mirrors, PATH policy, and project detection.
+          {t('app.description')}
         </p>
       </div>
 
-      <nav className={`${insetClass} flex flex-col gap-2 p-2`} aria-label="Main navigation">
+      <nav className={`${insetClass} flex flex-col gap-2 p-2`} aria-label={t('nav.mainNavigation')}>
         {navItems.map((item) => {
           const active = activeView === item.key;
           return (
@@ -54,10 +57,10 @@ export function Sidebar({ activeView, setActiveView, hostsCount, totalInstalledR
               <NavGlyph name={item.key} active={active} />
               <span className="min-w-0">
                 <span className="block text-[11px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-                  {item.eyebrow}
+                  {t(`nav.${item.key}Eyebrow`)}
                 </span>
                 <span className="block truncate text-[15px] font-semibold text-[var(--text-primary)]">
-                  {item.label}
+                  {t(`nav.${item.key}`)}
                 </span>
               </span>
             </button>
@@ -68,19 +71,18 @@ export function Sidebar({ activeView, setActiveView, hostsCount, totalInstalledR
       <div className={`${cardClass} mt-auto space-y-3 p-4`}>
         <div className="flex items-center justify-between">
           <span className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-            Live Status
+            {t('sidebar.liveStatus')}
           </span>
           <span className="rounded-[var(--radius-pill)] bg-[var(--accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--accent-primary)]">
-            {busyLabel ? 'Busy' : 'Ready'}
+            {busyLabel ? t('sidebar.busy') : t('sidebar.ready')}
           </span>
         </div>
         <p className="text-[13px] leading-6 text-[var(--text-secondary)]">
-          {busyLabel ??
-            'No running task. Runtime, mirror, and dependency actions require confirmation before they mutate the host.'}
+          {busyLabel ?? t('sidebar.noTask')}
         </p>
         <div className="grid grid-cols-2 gap-3">
-          <MetricTile label="Hosts" value={String(hostsCount)} />
-          <MetricTile label="Runtimes" value={String(totalInstalledRuntimes)} />
+          <MetricTile label={t('sidebar.hosts')} value={String(hostsCount)} />
+          <MetricTile label={t('sidebar.runtimes')} value={String(totalInstalledRuntimes)} />
         </div>
       </div>
     </aside>
